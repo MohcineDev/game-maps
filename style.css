@@ -1,0 +1,26 @@
+:root {
+    --dark: #101020;
+}
+
+body {
+    background-color: var(--dark);
+    color: #fff;
+}
+
+.parent {
+    width: 500px;
+    height: 500px;
+    background-color: #555;
+    position: relative;
+}
+
+.player {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: yellow;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
