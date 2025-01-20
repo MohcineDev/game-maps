@@ -17,9 +17,7 @@ function getPlayerXRelativeToCanvas(player, canvas) {
     return playerRect.left - canvasRect.left
 }
 
-let keys = {
-
-}
+let keys = {}
 
 document.addEventListener('keyup', e => {
     keys[e.key] = false
@@ -32,14 +30,15 @@ document.addEventListener('keydown', e => {
         console.log('pause')
         pause()
     }
+    const playerX = getPlayerXRelativeToCanvas(player, canvas)
     //space
     if (e.key === ' ') {
         createBullet(playerX)
     }
 })
 
-     
-function test(){
+
+function test() {
     const canvasWidth = canvas.clientWidth
     const playerWidth = player.clientWidth
 
@@ -60,14 +59,23 @@ function test(){
 
 let bullets = []
 let bulletYMove = playerInitY
+let canvasREC = canvas.getBoundingClientRect()
 
 function moveBullet(bullet) {
-    let bulletREC = bullet.getBoundingClientRect()
-    let canvasREC = canvas.getBoundingClientRect()
+    console.log(canvasREC)
+    let bTop = parseInt(bullet.style.top)
+    bTop -= moveAmount
+    bullet.style.top = `${bTop}px`
 
-    bulletYMove -= moveAmount
-    bullet.style.top = `${bulletYMove}px`
-    requestAnimationFrame(moveBullet)
+
+    if (bTop < canvasREC.top) {
+        bullet.remove()
+        ///remove bullet
+        bullets = bullets.filter(b => b !== bullet)
+    } else {
+
+        requestAnimationFrame(() => moveBullet(bullet))
+    }
 }
 
 function createBullet(playerX) {
