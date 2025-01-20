@@ -1,131 +1,84 @@
-const canvas = document.querySelector('.parent')
+const canvas = document.querySelector('.canvas')
 const player = document.querySelector('.player')
 
-let moveHor = player.offsetLeft
 let moveVer = player.offsetTop
 
-let moveAmount = 4
-let leftId = null
-let rightId = null
-let upId = null
-let downId = null
-let leftMove = true
-let rightMove = true
-let upMove = true
-let downMove = true
+let moveAmount = 5
+let playerInitX = canvas.clientWidth / 2 - player.clientWidth / 2
+let playerInitY = canvas.clientHeight - player.clientHeight - 20
+let moveHor = playerInitX
+console.log('playerInitY : ', playerInitY)
+player.style.transform = `translate(${playerInitX}px)`
 
-let beforePause = null
+function getPlayerXRelativeToCanvas(player, canvas) {
+    const playerRect = player.getBoundingClientRect()
+    const canvasRect = canvas.getBoundingClientRect()
 
-parent.addEventListener('keydown', e => {
+    return playerRect.left - canvasRect.left
+}
 
-    if (e.key === 'ArrowLeft') {
-        checkforpause()
+let keys = {
 
-        if (leftMove) {
-            moveElementLeft()
-        }
-        leftMove = false
+}
 
-    } else if (e.key === 'ArrowRight') {
-        checkforpause()
-        if (rightMove) {
-            moveElementRight()
-        }
-        rightMove = false
-    } else if (e.key === 'ArrowUp') {
-        checkforpause()
-        if (upMove) {
-            moveElementUp()
-        }
-        upMove = false
-    } else if (e.key === 'ArrowDown') {
-        checkforpause()
-
-        if (downMove) {
-            moveElementDown()
-        }
-        downMove = false
-    }
-
-    ///PAUSE
-    else if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
-        console.log('pause');
-//        player.classList.add('pause')
-        pause()
-    }
-    console.log(e);
-
+document.addEventListener('keyup', e => {
+    keys[e.key] = false
 })
 
-function checkforpause() {
-    if (player.classList.contains('pause')) {
-        player.classList.remove('pause')
+document.addEventListener('keydown', e => {
+    keys[e.key] = true
+    // Pause logic remains unchanged
+    if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+        console.log('pause')
+        pause()
     }
-}
-
-function moveElementRight() {
-    moveHor += moveAmount
-    player.style.left = `${moveHor}px`
-    null_id_and_cancel(leftId)
-    null_id_and_cancel(upId)
-    null_id_and_cancel(downId)
-    rightId = requestAnimationFrame(moveElementRight)
-
-
-    leftMove = true
-    upMove = true
-    downMove = true
-}
-function moveElementLeft() {
-    moveHor -= moveAmount
-    player.style.left = `${moveHor}px`
-    null_id_and_cancel(rightId)
-    null_id_and_cancel(upId)
-    null_id_and_cancel(downId)
-    leftId = requestAnimationFrame(moveElementLeft)
-    rightMove = true
-
-    upMove = true
-    downMove = true
-}
-function moveElementUp() {
-    moveVer -= moveAmount
-    player.style.top = `${moveVer}px`
-    null_id_and_cancel(leftId)
-    null_id_and_cancel(rightId)
-    null_id_and_cancel(downId)
-    upId = requestAnimationFrame(moveElementUp)
-    rightMove = true
-    leftMove = true
-
-    downMove = true
-}
-function moveElementDown() {
-    moveVer += moveAmount
-    player.style.top = `${moveVer}px`
-    null_id_and_cancel(leftId)
-    null_id_and_cancel(rightId)
-    null_id_and_cancel(upId)
-
-    downId = requestAnimationFrame(moveElementDown)
-    rightMove = true
-    leftMove = true
-    upMove = true
-}
-
-
-function null_id_and_cancel(a) {
-
-    if (a) {
-        cancelAnimationFrame(a)
-        a = null
+    //space
+    if (e.key === ' ') {
+        createBullet(playerX)
     }
+})
+
+     
+function test(){
+    const canvasWidth = canvas.clientWidth
+    const playerWidth = player.clientWidth
+
+    //player x pos
+    const playerX = getPlayerXRelativeToCanvas(player, canvas)
+    if (keys['ArrowLeft'] && playerX > 0) {
+        moveHor -= moveAmount
+    }
+
+    if (keys['ArrowRight'] && playerX + playerWidth < canvasWidth) {
+        moveHor += moveAmount
+    }
+
+    requestAnimationFrame(test)
+
+    player.style.transform = `translateX(${moveHor}px)`
 }
 
-function pause() {
-    null_id_and_cancel(leftId)
-    null_id_and_cancel(rightId)
-    null_id_and_cancel(upId)
-    null_id_and_cancel(downId)
+let bullets = []
+let bulletYMove = playerInitY
 
+function moveBullet(bullet) {
+    let bulletREC = bullet.getBoundingClientRect()
+    let canvasREC = canvas.getBoundingClientRect()
+
+    bulletYMove -= moveAmount
+    bullet.style.top = `${bulletYMove}px`
+    requestAnimationFrame(moveBullet)
 }
+
+function createBullet(playerX) {
+    const bullet = document.createElement('span')
+    bullet.classList.add('bullet')
+    bullet.style.left = `${playerX}px`
+    bullet.style.top = `${playerInitY}px`
+    bullet.style.transform = `translate(50%)`
+
+    canvas.appendChild(bullet)
+    bullets.push(bullet)
+    moveBullet(bullet)
+}
+requestAnimationFrame(test)
