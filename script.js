@@ -10,6 +10,7 @@ let moveAmount = 5
 let playerInitX = canvas.clientWidth / 2 - player.clientWidth / 2
 let playerInitY = canvas.clientHeight - player.clientHeight
 let moveHor = playerInitX
+let bulletSpeed = 8
 
 player.style.transform = `translate(${playerInitX}px)`
 
@@ -25,7 +26,8 @@ let keys = {}
 document.addEventListener('keyup', e => {
     keys[e.key] = false
 })
-
+let shooting = false
+let canShoot = true
 document.addEventListener('keydown', e => {
     keys[e.key] = true
 
@@ -33,7 +35,17 @@ document.addEventListener('keydown', e => {
     const playerX = getPlayerXRelativeToCanvas(player, canvas)
     //space
     if (e.key === ' ') {
-        createBullet(playerX)
+
+        if (canShoot) {
+
+            createBullet(playerX)
+
+            shooting = true
+            canShoot = false
+            setTimeout(() => {
+                canShoot = true
+            }, 150)
+        }
     }
 })
 
@@ -61,16 +73,15 @@ function movePlayer() {
 
 let bullets = []
 let bulletYMove = playerInitY
-
 function moveBullet(bullet) {
     let bTop = parseInt(bullet.style.top)
-    bTop -= moveAmount
+    bTop -= bulletSpeed
     bullet.style.top = `${bTop}px`
 
-
-    if (bTop <= canvasREC.top - canvasREC.top) {
+    ///the bullet height
+    if (bTop <= -25) {
         bullet.remove()
-        ///remove bullet
+        ///remove the curcreateBulletrent bullet
         bullets = bullets.filter(b => b !== bullet)
     } else {
         requestAnimationFrame(() => moveBullet(bullet))
@@ -100,7 +111,7 @@ function createEnimies() {
         for (let j = 0; j < 3; j++) {
             const ghostDiv = document.createElement('div')
             ghostDiv.classList.add('enimie')
-            ghostDiv.style.transform = `translate(${60 * index}px, ${25 * j}px)`;
+            ghostDiv.style.transform = `translate(${60 * index}px, ${35 * j}px)`;
 
             enimieContainer.appendChild(ghostDiv)
 
@@ -108,26 +119,31 @@ function createEnimies() {
     }
 }
 
-let move = 0
+let moveEnimiesHor = 0
+let moveEnimiesVer = 0
 let moveEnimiesAmount = 2
+let moveEnimiesDown = 20
 let reverse = false
 
 function moveEnimieContainer() {
 
     const enimieREC = enimieContainer.getBoundingClientRect()
 
-    if (!reverse && enimieREC.left + enimieREC.width < canvasREC.left + canvasREC.width) {
-        move += moveEnimiesAmount
-        enimieContainer.style.transform = `translateX(${move}px)`
-    } else
+    if (!reverse && enimieREC.right < canvasREC.right) {
+        moveEnimiesHor += moveEnimiesAmount
+    } else if (!reverse && enimieREC.right == canvasREC.right) {
         reverse = true
+        moveEnimiesVer += moveEnimiesDown
+    }
 
     if (reverse && enimieREC.left > canvasREC.left) {
-
-        move -= moveEnimiesAmount
-        enimieContainer.style.transform = `translateX(${move}px)`
-    } else
+        moveEnimiesHor -= moveEnimiesAmount
+    } else if (reverse && enimieREC.left == canvasREC.left) {
         reverse = false
+        moveEnimiesVer += moveEnimiesDown
+    }
+
+    enimieContainer.style.transform = `translate(${moveEnimiesHor}px,${moveEnimiesVer}px )`
 }
 
 
@@ -138,7 +154,6 @@ function gameLoop() {
     movePlayer()
     moveEnimieContainer()
     requestAnimationFrame(gameLoop)
-
-
 }
+
 gameLoop()
