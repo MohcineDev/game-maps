@@ -7,7 +7,7 @@ const playerWidth = player.clientWidth
 const canvasREC = canvas.getBoundingClientRect()
 const startPopup = document.querySelector('.start-popup')
 
-writeTitle(startPopup.querySelector('h1'), 'Space invader')
+writeTitle(startPopup.querySelector('h1'), 'Space invader #')
 
 startPopup.querySelector('button').onclick = () => {
     init()

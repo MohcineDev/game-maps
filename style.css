@@ -85,14 +85,14 @@ body {
 /* /////////////popups */
 
 .popup {
-    width: 300px;
+    width: 350px;
     position: absolute;
     font-family: "Jersey 20", serif;
     font-weight: 700;
     background: url('./imgs/1.webp');
     border-radius: 14px 0;
     z-index: 2;
-    padding: 2rem;
+    padding: 2rem 1.5rem;
     color: var(--col1);
     background-color: #000;
     border: 2px solid var(--col1);
