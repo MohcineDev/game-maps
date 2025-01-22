@@ -44,17 +44,15 @@ function movePlayer() {
 
     //player x pos
     const playerX = getPlayerXRelativeToCanvas(player, canvas)
-    console.log(playerX)
+ 
     if (keys['ArrowLeft'] && playerX > 0) {
         moveHor -= moveAmount
     }
 
     if (keys['ArrowRight'] && playerX + playerWidth < canvasWidth) {
-        console.log(111)
         moveHor += moveAmount
     }
 
-    //requestAnimationFrame(movePlayer)
 
     player.style.transform = `translateX(${moveHor}px)`
 }
