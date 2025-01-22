@@ -1,16 +1,19 @@
+import { moveEnimiesAmount, moveEnimiesDown, movePlayerSpeed } from './speed.js'
 const canvas = document.querySelector('.canvas')
+const popup = document.querySelector('.popup')
+const restart = popup.querySelector('button')
 const player = document.querySelector('.player')
 const playerWidth = player.clientWidth
 const canvasREC = canvas.getBoundingClientRect()
 
 console.log('canvasREC: ', canvasREC)
 let moveVer = player.offsetTop
+let playerREC = player.getBoundingClientRect()
 
-let moveAmount = 5
 let playerInitX = canvas.clientWidth / 2 - player.clientWidth / 2
 let playerInitY = canvas.clientHeight - player.clientHeight
 let moveHor = playerInitX
-let bulletSpeed = 8
+let bulletSpeed = 20
 
 player.style.transform = `translate(${playerInitX}px)`
 
@@ -59,11 +62,11 @@ function movePlayer() {
     const playerX = getPlayerXRelativeToCanvas(player, canvas)
 
     if (keys['ArrowLeft'] && playerX > 0) {
-        moveHor -= moveAmount
+        moveHor -= movePlayerSpeed
     }
 
     if (keys['ArrowRight'] && playerX + playerWidth < canvasWidth) {
-        moveHor += moveAmount
+        moveHor += movePlayerSpeed
     }
 
 
@@ -86,7 +89,7 @@ function moveBullet(bullet) {
     } else {
         requestAnimationFrame(() => moveBullet(bullet))
     }
-    checkForCollision(bullet)
+    checkForCollision_bullet_enimie(bullet)
 
 }
 
@@ -112,9 +115,9 @@ function createEnimies() {
     for (let index = 0; index < 5; index++) {
         for (let j = 0; j < 3; j++) {
             const ghostDiv = document.createElement('div')
-            ghostDiv.classList.add('enimie')
+            ghostDiv.classList.add('enemy')
             ghostDiv.style.transform = `translate(${60 * index}px, ${35 * j}px)`;
-
+            ghostDiv.id = index + j
             enimieContainer.appendChild(ghostDiv)
 
         }
@@ -123,8 +126,6 @@ function createEnimies() {
 
 let moveEnimiesHor = 0
 let moveEnimiesVer = 0
-let moveEnimiesAmount = 2
-let moveEnimiesDown = 20
 let reverse = false
 
 function moveEnimieContainer() {
@@ -148,31 +149,61 @@ function moveEnimieContainer() {
     enimieContainer.style.transform = `translate(${moveEnimiesHor}px,${moveEnimiesVer}px )`
 }
 
-function checkForCollision(bullet) {
+function checkForCollision_bullet_enimie(bullet) {
     let enimies = document.querySelectorAll('.enimie')
     let bulletREC = bullet.getBoundingClientRect()
     // console.log("bulletREC : ", bulletREC)
     for (let i = 0; i < enimies.length; i++) {
         let enimieREC = enimies[i].getBoundingClientRect()
         // console.log("enimieREC : ", enimieREC)
-        if (enimieREC.left < bulletREC.left &&
-            enimieREC.right > bulletREC.right &&
-            enimieREC.top < bulletREC.top &&
-            enimieREC.bottom > bulletREC.bottom
+        if (enimieREC.left < bulletREC.left && enimieREC.right > bulletREC.right &&
+            enimieREC.top < bulletREC.top && enimieREC.bottom > bulletREC.bottom
         ) {
             bullet.remove()
             enimies[i].remove()
+            //
+        }
+    }
+}
+console.log(playerREC);
+
+let REQID = null
+
+function checkForCollision_player_enimie() {
+    let enimies = document.querySelectorAll('.enemy')
+
+    for (let i = 0; i < enimies.length; i++) {
+        let enimieREC = enimies[i].getBoundingClientRect()
+
+        if (playerREC.top <= enimieREC.bottom) {
+
+            cancelAnimationFrame(REQID)
+            popup.style.display = 'block'
+            return;
         }
     }
 }
 
 createEnimies()
 
-
 function gameLoop() {
+    console.log('REQID : ', REQID);
+
     movePlayer()
     moveEnimieContainer()
-    requestAnimationFrame(gameLoop)
+    checkForCollision_player_enimie()
+    REQID = requestAnimationFrame(gameLoop)
 }
 
 gameLoop()
+
+restart.onclick = () => restartGAME()
+
+function restartGAME() {
+    console.log(1000000000);
+
+    enimieContainer.style.transform = `translate(${0}px,${0}px )`
+    popup.style.display = 'none'
+    gameLoop()
+
+}
