@@ -28,6 +28,7 @@ document.addEventListener('keyup', e => {
 })
 let shooting = false
 let canShoot = true
+
 document.addEventListener('keydown', e => {
     keys[e.key] = true
 
@@ -56,7 +57,7 @@ function movePlayer() {
 
     //player x pos
     const playerX = getPlayerXRelativeToCanvas(player, canvas)
- 
+
     if (keys['ArrowLeft'] && playerX > 0) {
         moveHor -= moveAmount
     }
@@ -71,6 +72,7 @@ function movePlayer() {
 
 let bullets = []
 let bulletYMove = playerInitY
+
 function moveBullet(bullet) {
     let bTop = parseInt(bullet.style.top)
     bTop -= bulletSpeed
@@ -84,6 +86,8 @@ function moveBullet(bullet) {
     } else {
         requestAnimationFrame(() => moveBullet(bullet))
     }
+    checkForCollision(bullet)
+
 }
 
 function createBullet(playerX) {
@@ -144,6 +148,23 @@ function moveEnimieContainer() {
     enimieContainer.style.transform = `translate(${moveEnimiesHor}px,${moveEnimiesVer}px )`
 }
 
+function checkForCollision(bullet) {
+    let enimies = document.querySelectorAll('.enimie')
+    let bulletREC = bullet.getBoundingClientRect()
+    // console.log("bulletREC : ", bulletREC)
+    for (let i = 0; i < enimies.length; i++) {
+        let enimieREC = enimies[i].getBoundingClientRect()
+        // console.log("enimieREC : ", enimieREC)
+        if (enimieREC.left < bulletREC.left &&
+            enimieREC.right > bulletREC.right &&
+            enimieREC.top < bulletREC.top &&
+            enimieREC.bottom > bulletREC.bottom
+        ) {
+            bullet.remove()
+            enimies[i].remove()
+        }
+    }
+}
 
 createEnimies()
 
