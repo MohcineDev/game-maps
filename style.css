@@ -34,14 +34,14 @@ body {
 }
 
 .player {
-    width: 80px;
-    height: 75px;
+    width: 60px;
+    height: 55px;
     /* border-radius: 50%; */
     background-color: rgb(189, 189, 183);
     position: absolute;
     top: 600px;
     /* top: 200px; */
-    background: url('./imgs/sqcJgb0.png');
+    background: url('./imgs/sqcJgb.png');
     background-size: cover;
 }
 
@@ -50,8 +50,8 @@ body {
 }
 
 .bullet {
-    width: 10px;
-    height: 25px;
+    width: 8px;
+    height: 20px;
     border-radius: 50%;
     background-color: var(--col3);
     position: absolute;
@@ -85,6 +85,7 @@ body {
 /* /////////////popups */
 
 .popup {
+    display: none;
     width: 350px;
     position: absolute;
     font-family: "Jersey 20", serif;
@@ -100,12 +101,7 @@ body {
     user-select: none;
     text-transform: uppercase;
     text-align: center;
-}
-
-.restart-popup {
-    display: none;
-}
-
+} 
 .popup h1 {
     font-size: 2.5rem;
     margin: 0;
@@ -129,13 +125,34 @@ button {
     text-shadow: 0 2px 0px red, 0 -2px 0px aqua;
 }
 
-.popup button:hover, .popup p:hover {
+.popup button:hover,
+.popup p:hover {
     transform: translate(5px, 5px);
     background: #000;
     text-shadow: 0 2px 0px aqua, 0 -2px 0px red;
 }
 
-
+.start-popup{
+    display: block;
+}
 .start-popup h1 {
     margin: 0;
+}
+
+.playing .start-popup, .playing .pause-popup {
+    display: none;
+}
+
+.playing .canvas {
+    filter: none;
+}
+
+/* ///paused */
+
+.paused .pause-popup {
+    display: block;
+}
+
+.paused .canvas {
+    filter: blur(4px);
 }

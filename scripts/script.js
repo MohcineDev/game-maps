@@ -1,18 +1,35 @@
-import { moveEnimiesAmount, moveEnimiesDown, movePlayerSpeed, bulletSpeed, writeTitle } from './speed.js'
+import { moveEnimiesX, moveEnimiesY, movePlayerSpeed, bulletSpeed, writeTitle } from './speed.js'
+
 const canvas = document.querySelector('.canvas')
-const popup = document.querySelector('.restart-popup')
-const restart = popup.querySelector('button')
+const restartPopup = document.querySelector('.restart-popup')
+const restartBtn = restartPopup.querySelector('button')
+const restartScore = restartPopup.querySelector('span')
+
+//start Popup
+const startPopup = document.querySelector('.start-popup')
+const startBtn = startPopup.querySelector('button')
+
+//pause Popup
+const pausePopup = document.querySelector('.pause-popup')
+const resumeBtn = pausePopup.querySelector('button')
+
 const player = document.querySelector('.player')
 const playerWidth = player.clientWidth
 const canvasREC = canvas.getBoundingClientRect()
-const startPopup = document.querySelector('.start-popup')
+
+let Score = 0
+let REQID = null
 
 writeTitle(startPopup.querySelector('h1'), 'Space invader #')
 
-startPopup.querySelector('button').onclick = () => {
+startBtn.onclick = () => {
     init()
-    startPopup.style.display = 'none'
-    canvas.style.filter = 'none'
+    document.body.classList.add('playing')
+}
+resumeBtn.onclick = () => {
+    init()
+    document.body.classList.add('playing')
+    document.body.classList.remove('paused')
 }
 
 console.log('canvasREC: ', canvasREC)
@@ -38,7 +55,19 @@ let keys = {}
 
 document.addEventListener('keyup', e => {
     keys[e.key] = false
+    if (e.key === ' ') {
+        if (startPopup.checkVisibility()) {
+            startBtn.click()
+        }
+        else if (restartPopup.checkVisibility()) {
+            restartBtn.click()
+        } else if (pausePopup.checkVisibility()) {
+            resumeBtn.click()
+        }
+
+    }
 })
+ 
 let shooting = false
 let canShoot = true
 let playerX = null
@@ -48,7 +77,6 @@ document.addEventListener('keydown', e => {
     playerX = getPlayerXRelativeToCanvas(player, canvas)
     //space
     if (e.key === ' ') {
-
         if (canShoot) {
 
             createBullet(playerX)
@@ -59,6 +87,13 @@ document.addEventListener('keydown', e => {
                 canShoot = true
             }, 150)
         }
+    } else if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+        document.body.classList.remove('playing')
+        document.body.classList.add('paused')
+        
+        cancelAnimationFrame(REQID)
+        writeTitle(startPopup.querySelector('h1'), 'Space invader #')
+
     }
 })
 
@@ -87,7 +122,7 @@ let bulletYMove = playerInitY
 let canshoooooooot = true;
 
 function moveBullet() {
-    console.log(bullets.length)
+
     for (let i = 0; i < bullets.length; i++) {
 
         let bTop = parseInt(bullets[i].style.top)
@@ -100,7 +135,6 @@ function moveBullet() {
             ///remove the curcreateBulletrent bullet
             bullets = bullets.filter(b => b !== bullets[i])
         }
-        console.log(bullets[i])
         bullets[i] ? checkForCollision_bullet_enimie(bullets[i]) : console.log('111111112')
     }
 
@@ -115,7 +149,7 @@ function createBullet(playerX) {
 
     canvas.appendChild(bullet)
     bullets.push(bullet)
-    moveBullet()
+    //  moveBullet()
 }
 
 const enimieContainer = document.createElement('div')
@@ -144,20 +178,20 @@ function moveEnimieContainer() {
     const enimieREC = enimieContainer.getBoundingClientRect()
 
     if (!reverse && enimieREC.right < canvasREC.right) {
-        moveEnimiesHor += moveEnimiesAmount
+        moveEnimiesHor += moveEnimiesX
     } else if (!reverse && enimieREC.right == canvasREC.right) {
         reverse = true
-        moveEnimiesVer += moveEnimiesDown
+        moveEnimiesVer += moveEnimiesY
     }
 
     if (reverse && enimieREC.left > canvasREC.left) {
-        moveEnimiesHor -= moveEnimiesAmount
+        moveEnimiesHor -= moveEnimiesX
     } else if (reverse && enimieREC.left == canvasREC.left) {
         reverse = false
-        moveEnimiesVer += moveEnimiesDown
+        moveEnimiesVer += moveEnimiesY
     }
 
-    enimieContainer.style.transform = `translate(${moveEnimiesHor}px,${moveEnimiesVer}px )`
+    enimieContainer.style.transform = `translate(${moveEnimiesHor}px,${moveEnimiesVer}px)`
 }
 
 function checkForCollision_bullet_enimie(bullet) {
@@ -170,16 +204,16 @@ function checkForCollision_bullet_enimie(bullet) {
         if (enimieREC.left < bulletREC.left && enimieREC.right > bulletREC.right &&
             enimieREC.top < bulletREC.top && enimieREC.bottom > bulletREC.bottom
         ) {
-            console.log(1111111111)
+
+            Score += 10
             bullet.remove()
             enimies[i].remove()
-            //
         }
     }
 }
+
 console.log(playerREC);
 
-let REQID
 let isGameOver = false
 
 function checkForCollision_player_enimie() {
@@ -190,9 +224,8 @@ function checkForCollision_player_enimie() {
 
         if (playerREC.top <= enimieREC.bottom) {
             isGameOver = true
-            console.log('REQID : ', REQID);
-            popup.style.display = 'block'
-
+            restartScore.textContent = Score + "."
+            restartPopup.style.display = 'block'
         }
     }
 }
@@ -210,7 +243,7 @@ function gameLoop() {
 }
 
 
-restart.onclick = () => restartGAME()
+restartBtn.onclick = () => restartGAME()
 
 function restartGAME() {
     isGameOver = false
@@ -224,10 +257,14 @@ function init() {
     moveEnimiesHor = 0
     moveEnimiesVer = 0
     enimieContainer.style.transform = `translate(0px,0px)`
-    popup.style.display = 'none'
+
+    ///restrat popup
+    restartPopup.style.display = 'none'
+    restartScore.textContent = 0
 
     //////////////remove bulllllets
     const DOM_bullets = document.querySelectorAll('.bullet')
+
     bullets = []
     DOM_bullets.forEach(elem => {
         elem.remove()

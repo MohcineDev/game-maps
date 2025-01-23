@@ -1,1 +1,3 @@
-<img src="./imgs/p.png"/>
+<div align="center">
+<img src="./imgs/p.png" />
+</div>
