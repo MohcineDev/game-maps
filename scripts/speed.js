@@ -1,5 +1,5 @@
-export const moveEnimiesX = 5
-export const moveEnimiesY = 10
+export const moveEnimiesX = 10
+export const moveEnimiesY = 50
 export const movePlayerSpeed = 5
 export const bulletSpeed = 10
 
