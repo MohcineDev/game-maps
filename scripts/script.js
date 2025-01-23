@@ -142,19 +142,19 @@ export function createEnimies() {
 let reverse = false
 
 function moveEnimieContainer() {
-
+console.log(1111)
     const enimieREC = enimieContainer.getBoundingClientRect()
 
     if (!reverse && enimieREC.right < canvasREC.right) {
         moveEnimiesHor += moveEnimiesX
-    } else if (!reverse && enimieREC.right == canvasREC.right) {
+    } else if (!reverse && enimieREC.right >= canvasREC.right) {
         reverse = true
         moveEnimiesVer += moveEnimiesY
     }
 
     if (reverse && enimieREC.left > canvasREC.left) {
         moveEnimiesHor -= moveEnimiesX
-    } else if (reverse && enimieREC.left == canvasREC.left) {
+    } else if (reverse && enimieREC.left <= canvasREC.left) {
         reverse = false
         moveEnimiesVer += moveEnimiesY
     }

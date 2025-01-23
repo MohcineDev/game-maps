@@ -128,7 +128,7 @@ body {
 
 @keyframes scale {
     0% {
-        transform: scale(1);
+        transform: scale(0.95);
     }
 
     30% {
@@ -142,7 +142,7 @@ body {
     }
 
     100% {
-        transform: scale(1);
+        transform: scale(0.95);
     }
 }
 
