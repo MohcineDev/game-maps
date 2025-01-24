@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Jersey+20&family=Pixelify+Sans:wght@400..700&display=swap');
 
 :root {
@@ -7,12 +6,15 @@
     --col1: #f2b106;
     --col2: #09fff4;
     --col3: crimson;
+    --pop-shadow: 0 0 7px var(--col3), 0 0 7px var(--col2) inset;
 
 }
-*{
+
+* {
     font-family: "Jersey 20", serif;
 
 }
+
 svg {
     width: 20px;
 }
@@ -133,12 +135,12 @@ body {
 
     30% {
         transform: scale(1.1);
-        color: #cb5069;
+        color: #e78195;
     }
 
     60% {
         transform: scale(1.1);
-        color: #cb5069;
+        color: #e78195;
     }
 
     100% {
@@ -161,7 +163,7 @@ body {
     color: var(--col1);
     background-color: #000;
     border: 2px solid var(--col1);
-    box-shadow: 0 0 7px var(--col3), 0 0 7px var(--col2) inset;
+    box-shadow: var(--pop-shadow);
     user-select: none;
     text-transform: uppercase;
     text-align: center;
@@ -234,6 +236,29 @@ button {
     filter: blur(4px);
 }
 
+/* //////////settings   */
+
+.settings {
+    position: absolute;
+    z-index: 3;
+    background: #000;
+    padding: 10px;
+    left: 0;
+    top: 0;
+    box-shadow: var(--pop-shadow);
+    border-radius: 5px;
+    margin: 10px;
+}
+.settings>div{
+    margin: 10px 0;
+}
+.settings>div>div{
+    display: flex;
+}
+.settings input {
+    cursor: pointer;
+    margin: 0 5px;
+}
 
 @media screen and (max-width:580px) {
     .canvas, .options {
@@ -255,6 +280,6 @@ button {
     }
 }
 
-footer{
+footer {
     margin-top: 7rem;
 }
