@@ -50,7 +50,7 @@ body {
     position: absolute;
     top: 600px;
     /* top: 200px; */
-    background: url('./imgs/sqcJgb.png');
+    background: url('./imgs/sqcJgb0.png');
     background-size: cover;
 }
 
@@ -66,6 +66,15 @@ body {
     position: absolute;
     background: url('./imgs/gmJ+GH.png');
     background-size: cover;
+}
+
+.invader-bullet {
+    width: 4px;
+    height: 20px;
+    border: var(--col3) dotted;
+    border-width: 0 4px;
+    /* background-color: var(--col3); */
+    position: absolute;
 }
 
 .enemy {
@@ -107,6 +116,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-around;
+    filter: blur(4px);
 }
 
 .options p {
@@ -176,7 +186,7 @@ body {
     letter-spacing: 2px;
 }
 
-button {
+.popup button {
     width: 90%;
     padding: 10px;
     font-size: 1.4rem;
@@ -192,10 +202,8 @@ button {
     text-shadow: 0 2px 0px red, 0 -2px 0px aqua;
 }
 
-.popup button:hover,
-.popup p:hover {
+.popup button:hover {
     transform: translate(5px, 5px);
-    background: #000;
     text-shadow: 0 2px 0px aqua, 0 -2px 0px red;
 }
 
@@ -211,7 +219,8 @@ button {
     display: none;
 }
 
-.playing .canvas {
+.playing .canvas,
+.playing .options {
     filter: none;
 }
 
@@ -232,29 +241,70 @@ button {
     display: block;
 }
 
-.over .canvas {
+.over .canvas,
+.over .options {
     filter: blur(4px);
 }
 
 /* //////////settings   */
+nav{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+nav svg{
 
+    width: 20px;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
 .settings {
     position: absolute;
     z-index: 3;
-    background: #000;
-    padding: 10px;
-    left: 0;
-    top: 0;
+    left: 10px;
+    top: 10px;
     box-shadow: var(--pop-shadow);
     border-radius: 5px;
     margin: 10px;
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.3s;
 }
-.settings>div{
+
+.open {
+    max-height: 250px;
+}
+
+#open {
+    width: 20px;
+    height: 20px;
+    position: inherit;
+    right: -20px;
+    cursor: pointer;
+}
+
+#open::after {
+    content: "";
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 50%;
+    left: 50%;
+    border: 2px solid #000;
+    border-width: 0 0 2px 2px;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.settings>div {
     margin: 10px 0;
+    padding: 5px 10px;
 }
-.settings>div>div{
+
+.settings>div>div {
     display: flex;
 }
+
 .settings input {
     cursor: pointer;
     margin: 0 5px;

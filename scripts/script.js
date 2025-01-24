@@ -2,6 +2,7 @@ import { moveEnimiesX, moveEnimiesY, movePlayerSpeed, bulletSpeed, writeTitle } 
 import { restartScore } from './popups.js'
 
 const canvas = document.querySelector('.canvas')
+const optionsScore = document.querySelector('.options-score span')
 
 const player = document.querySelector('.player')
 const playerWidth = player.clientWidth
@@ -9,16 +10,14 @@ const canvasREC = canvas.getBoundingClientRect()
 
 let Score = 0
 let REQID = null
+export let isGameOver = false
 
-
-
-
-console.log('canvasREC: ', canvasREC)
-let moveVer = player.offsetTop
 let playerREC = player.getBoundingClientRect()
 
 let playerInitX = canvas.clientWidth / 2 - player.clientWidth / 2
 let playerInitY = canvas.clientHeight - player.clientHeight
+console.log(canvas.clientHeight)
+console.log(player.clientHeight)
 let moveHor = playerInitX
 let moveEnimiesHor = 0
 let moveEnimiesVer = 0
@@ -63,7 +62,7 @@ document.addEventListener('keydown', e => {
         cancelAnimationFrame(REQID)
     }
 })
- 
+
 // document.querySelector('.options-lives svg:last-child').remove()
 
 function movePlayer() {
@@ -137,12 +136,12 @@ export function createEnimies() {
 
         }
     }
+
 }
 
 let reverse = false
 
 function moveEnimieContainer() {
-console.log(1111)
     const enimieREC = enimieContainer.getBoundingClientRect()
 
     if (!reverse && enimieREC.right < canvasREC.right) {
@@ -161,8 +160,8 @@ console.log(1111)
 
     enimieContainer.style.transform = `translate(${moveEnimiesHor}px,${moveEnimiesVer}px)`
 }
-
 function checkForCollision_bullet_enimie(bullet) {
+
     let enimies = document.querySelectorAll('.enemy')
     let bulletREC = bullet.getBoundingClientRect()
 
@@ -172,8 +171,8 @@ function checkForCollision_bullet_enimie(bullet) {
         if (enimieREC.left < bulletREC.left && enimieREC.right > bulletREC.right &&
             enimieREC.top < bulletREC.top && enimieREC.bottom > bulletREC.bottom
         ) {
-
             Score += 10
+            optionsScore.textContent = Score
             bullet.remove()
             enimies[i].remove()
         }
@@ -181,7 +180,8 @@ function checkForCollision_bullet_enimie(bullet) {
 }
 
 
-export let isGameOver = false
+
+let howManyEnimiesCanShot = 0
 
 function checkForCollision_player_enimie() {
     let enimies = document.querySelectorAll('.enemy')
@@ -198,7 +198,63 @@ function checkForCollision_player_enimie() {
     }
 }
 
+//////////TODO  : stop the interval on game pause
+
+function enimiesShooting() {
+    let enimies = document.querySelectorAll('.enemy')
+
+    setInterval(() => {
+        howManyEnimiesCanShot = Math.floor(Math.random() * 4)
+        if (howManyEnimiesCanShot === 0) {
+            howManyEnimiesCanShot++
+        }
+
+        for (let i = 0; i < howManyEnimiesCanShot; i++) {
+            let enemy = Math.floor(Math.random() * enimies.length)
+            createEnimiesBullet(enimies[enemy])
+        }
+
+    }, 1500)
+}
+let enimiesBullet = []
+
+function moveEnimiesBullet() {
+    console.log(11111111111111111);
+    
+
+    for (let i = 0; i < enimiesBullet.length; i++) {
+        console.log("top  : ", enimiesBullet[i].style.top)
+        let bTop = parseInt(enimiesBullet[i].style.top)
+        bTop += bulletSpeed
+        enimiesBullet[i].style.top = `${bTop}px`
+
+        ///the bullet height
+        if (bTop >=canvasREC.height) {
+            enimiesBullet[i].remove()
+            ///remove the curcreateBulletrent bullet
+            enimiesBullet = enimiesBullet.filter(b => b !== enimiesBullet[i])
+        }
+        //        enimiesBullet[i] ? checkForCollision_bullet_enimie(enimiesBullet[i]) : console.log('111111112')
+    }
+
+}
+
 createEnimies()
+
+
+function createEnimiesBullet(invader) {
+    let invaderREC = invader.getBoundingClientRect()
+    const bullet = document.createElement('span')
+    bullet.classList.add('invader-bullet')
+    bullet.style.left = `${invaderREC.left - canvasREC.left + (invaderREC.width / 2)}px`
+    bullet.style.top = `${invaderREC.top - canvasREC.top + invaderREC.height - 5}px`
+    // bullet.style.transform = `translate(50%)`
+
+    canvas.appendChild(bullet)
+    enimiesBullet.push(bullet)
+    //  moveBullet()
+}
+
 
 export function gameLoop() {
     if (!isGameOver) {
@@ -206,14 +262,12 @@ export function gameLoop() {
 
         movePlayer()
         moveBullet()
+        moveEnimiesBullet()
         moveEnimieContainer()
         checkForCollision_player_enimie()
         REQID = requestAnimationFrame(gameLoop)
     }
 }
-
-
-
 
 export function init() {
     moveEnimiesHor = 0
@@ -233,6 +287,10 @@ export function init() {
         elem.remove()
 
     });
+    ////////options
+    optionsScore.textContent = 0
+    Score = 0
+    enimiesShooting()
 
     gameLoop()
 }
