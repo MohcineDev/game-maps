@@ -1,8 +1,4 @@
-import {
-    moveEnimiesX, moveEnimiesY, movePlayerSpeed, bulletSpeed, HorInput
-    , VerInput
-    , bulletInput
-} from './speed.js'
+import { moveEnimiesX, moveEnimiesY, movePlayerSpeed, bulletSpeed, HorInput, VerInput, bulletInput } from './speed.js'
 import { restartScore } from './popups.js'
 
 const canvas = document.querySelector('.canvas')
@@ -69,6 +65,8 @@ document.addEventListener('keydown', e => {
         paused = true
         document.body.classList.add('paused')
         clearInterval(countDownInterval)
+        clearInterval(invadersBulletInterval)
+        
         cancelAnimationFrame(REQID)
     }
 })
@@ -189,8 +187,6 @@ function checkForCollision_bullet_enimie(bullet) {
     }
 }
 
-
-
 let howManyEnimiesCanShot = 0
 
 function checkForCollision_player_enimie() {
@@ -206,12 +202,13 @@ function checkForCollision_player_enimie() {
     }
 }
 
-//////////TODO  : stop the interval on game pause
+////////// TODO : stop the interval on game pause
+let invadersBulletInterval = null
 
-function enemiesShooting() {
+export function enemiesShooting() {
     let invaders = document.querySelectorAll('.enemy')
 
-    setInterval(() => {
+    invadersBulletInterval = setInterval(() => {
         howManyEnimiesCanShot = Math.floor(Math.random() * 4)
         if (howManyEnimiesCanShot === 0) {
             howManyEnimiesCanShot++
@@ -247,7 +244,6 @@ function moveInvadersBullet() {
 
 createEnimies()
 
-
 function createEnimiesBullet(invader) {
     let invaderREC = invader.getBoundingClientRect()
     const bullet = document.createElement('span')
@@ -261,10 +257,8 @@ function createEnimiesBullet(invader) {
     //  moveBullet()
 }
 
-
 export function gameLoop() {
     if (!isGameOver) {
-
 
         movePlayer()
         moveBullet()
@@ -327,9 +321,7 @@ export function handleCountDown() {
     countDownInterval = setInterval(() => {
 
         if (seconds > 0) {
-
             seconds--
-
         } else if (minutes > 0) {
 
             minutes--
@@ -337,7 +329,6 @@ export function handleCountDown() {
         }
         let t = minutes + ':' + seconds
         countDown.textContent = t
-
 
         if (seconds === 0 && minutes === 0) {
             clearInterval(countDownInterval)
@@ -348,9 +339,7 @@ export function handleCountDown() {
         }
 
     }, 1000)
-
 }
-
 
 function gameOver() {
 

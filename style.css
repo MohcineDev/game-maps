@@ -190,17 +190,18 @@ body {
 .popup button {
     width: 90%;
     padding: 10px;
-    font-size: 1.4rem;
     cursor: pointer;
-    border: 2px solid var(--col2);
-    box-shadow: 0 0 7px #d10f36 inset, 0 0 7px 2px var(--col1);
     margin: 27px 0 0;
-    color: var(--col1);
-    text-transform: uppercase;
     font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--col1);
     border-radius: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 2px solid var(--col2);
     background: url('./imgs/1.webp'), #5c0c0c;
     text-shadow: 0 2px 0px red, 0 -2px 0px aqua;
+    box-shadow: 0 0 7px #d10f36 inset, 0 0 7px 2px var(--col1);
 }
 
 .popup button:hover {
