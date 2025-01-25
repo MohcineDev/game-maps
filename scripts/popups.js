@@ -1,5 +1,5 @@
 import { writeTitle } from './speed.js'
-import { init, enimieContainer, createEnimies, gameLoop, handleCountDown , enemiesShooting} from './script.js'
+import {gameSetting, init, enimieContainer, createEnimies, gameLoop, handleCountDown , enemiesShooting} from './script.js'
 
 ///game over
 const restartPopup = document.querySelector('.restart-popup')
@@ -22,6 +22,7 @@ startBtn.onclick = () => {
 }
 
 resumeBtn.onclick = () => {
+    gameSetting.canShoot = true
     gameLoop()
     handleCountDown()
     enemiesShooting()

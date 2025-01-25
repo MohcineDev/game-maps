@@ -1,7 +1,7 @@
 export let moveEnimiesX = 3
-export let moveEnimiesY = 10
+export let moveEnimiesY = 5
 export const movePlayerSpeed = 5
-export let bulletSpeed = 8
+export let bulletSpeed = 3
 
 const settings = document.querySelector('.settings')
 export const HorInput = document.querySelector('.settings #hor input')

@@ -11,7 +11,7 @@ const canvasREC = canvas.getBoundingClientRect()
 let Score = 0
 let REQID = null
 export let isGameOver = false
-
+let lives = 3
 let playerREC = player.getBoundingClientRect()
 
 let playerInitX = canvas.clientWidth / 2 - player.clientWidth / 2
@@ -36,9 +36,12 @@ document.addEventListener('keyup', e => {
     keys[e.key] = false
 })
 
-let canShoot = true
+export let gameSetting = {
+    canShoot: true
+}
 let playerX = null
 let paused = false
+
 document.addEventListener('keydown', e => {
     keys[e.key] = true
     HorInput.blur()
@@ -48,30 +51,29 @@ document.addEventListener('keydown', e => {
     playerX = getPlayerXRelativeToCanvas(player, canvas)
     //space
     if (e.key === ' ') {
-        if (canShoot) {
-            console.log(canShoot);
+        if (gameSetting.canShoot) {
 
             createBullet(playerX)
 
-            canShoot = false
+            gameSetting.canShoot = false
             setTimeout(() => {
-                canShoot = true
+                gameSetting.canShoot = true
             }, 200)
         }
     } else if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
         console.log('paused');
 
-        canShoot = false
+        gameSetting.canShoot = false
         paused = true
         document.body.classList.add('paused')
+        document.querySelector('.pause-popup span').textContent = countDown.textContent
         clearInterval(countDownInterval)
         clearInterval(invadersBulletInterval)
-        
+
         cancelAnimationFrame(REQID)
     }
 })
 
-// document.querySelector('.options-lives svg:last-child').remove()
 
 function movePlayer() {
     const canvasWidth = canvas.clientWidth
@@ -196,7 +198,7 @@ function checkForCollision_player_enimie() {
         let enimieREC = enimies[i].getBoundingClientRect()
 
         if (playerREC.top <= enimieREC.bottom) {
-            gameOver()
+            gameOver('killed')
             // restartPopup.style.display = 'block'
         }
     }
@@ -234,10 +236,10 @@ function moveInvadersBullet() {
         ///the bullet height
         if (bTop >= canvasREC.height) {
             invadersBullet[i].remove()
-            ///remove the curcreateBulletrent bullet
+            ///remove the curcreateBulletrent bullet if it reaches canvas end
             invadersBullet = invadersBullet.filter(b => b !== invadersBullet[i])
         }
-        //        enimiesBullet[i] ? checkForCollision_bullet_enimie(enimiesBullet[i]) : console.log('111111112')
+        invadersBullet[i] ? checkForCollision_player_invaderBullet(invadersBullet[i]) : console.log('111111112')
     }
 
 }
@@ -257,6 +259,60 @@ function createEnimiesBullet(invader) {
     //  moveBullet()
 }
 
+let player_invaderBullet = false
+function checkForCollision_player_invaderBullet(bullet) {
+
+    let bulletREC = bullet.getBoundingClientRect()
+    let playerREC = player.getBoundingClientRect()
+
+    // console.log(bulletREC.top, playerREC.top)
+
+    if (playerREC.top < bulletREC.top
+
+        ///check bullet right with player left
+        && playerREC.left <= bulletREC.right && playerREC.right >= bulletREC.right
+        ///check bullet left with player right
+        && playerREC.right >= bulletREC.left && playerREC.left <= bulletREC.left
+
+    ) {
+        bullet.remove()
+        updateLives()
+
+        console.log(playerREC.left, "<", bulletREC.right);
+        player_invaderBullet = true
+        console.log("hit");
+
+        // bullet.remove()
+        // enimies[i].remove()
+    }
+}
+
+/////TODO if time is up and you paused ==> pause countdown in game pausd case
+function updateLives() {
+    if (player_invaderBullet) {
+
+        lives--
+        if (lives === 0) {
+            isGameOver = true
+            document.querySelector(`.options-lives svg:nth-of-type(${lives + 1})`).classList.remove('heartbeat')
+            gameOver('lives indedddddd')
+        }
+        if (lives > 0) {
+            document.querySelector(`.options-lives svg:nth-of-type(${lives + 1})`).style.display = 'none'
+            document.querySelector(`.options-lives svg:nth-of-type(${lives + 1})`).classList.remove('heartbeat')
+
+            document.querySelector(`.options-lives svg:nth-of-type(${lives})`).classList.add('heartbeat')
+        }
+
+        console.log(lives);
+        player_invaderBullet = false
+
+    }
+}
+
+
+//////////
+
 export function gameLoop() {
     if (!isGameOver) {
 
@@ -269,27 +325,35 @@ export function gameLoop() {
     }
 }
 
+
 export function init() {
     moveEnimiesHor = 0
     isGameOver = false
     moveEnimiesVer = 0
+    lives = 3
     enimieContainer.style.transform = `translate(0px,0px)`
-    canShoot = true
+    gameSetting.canShoot = true
     ///
-    countDown.textContent = '00:10'
+    countDown.textContent = '01:10'
     handleCountDown()
 
     ///restrat popup
     // restartPopup.style.display = 'none'
     restartScore.textContent = 0
 
+    //lives
+    Array.from(document.querySelectorAll(`.options-lives svg`), elem => elem.style.display = 'block')
     //////////////remove bulllllets
     const DOM_bullets = document.querySelectorAll('.bullet')
+    const DOM_invader_bullet = document.querySelectorAll('.invader-bullet')
 
     bullets = []
+    invadersBullet = []
     DOM_bullets.forEach(elem => {
         elem.remove()
-
+    });
+    DOM_invader_bullet.forEach(elem => {
+        elem.remove()
     });
     ////////options
     optionsScore.textContent = 0
@@ -304,6 +368,8 @@ let countDownInterval = null
 export function handleCountDown() {
 
     let startCount = countDown.textContent.split(':')
+    console.log(countDown.textContent);
+
     let minutes = parseInt(startCount[0])
     let seconds = parseInt(startCount[1])
     console.log('seconds : ', seconds)
@@ -315,7 +381,7 @@ export function handleCountDown() {
         countDown.textContent = minutes + ':' + seconds
     } else if (seconds > 0) {
         seconds--
-        countDown.textContent = minutes + ':' + seconds
+        countDown.textContent = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`
     }
 
     countDownInterval = setInterval(() => {
@@ -327,7 +393,7 @@ export function handleCountDown() {
             minutes--
             seconds = 59
         }
-        let t = minutes + ':' + seconds
+        let t = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`
         countDown.textContent = t
 
         if (seconds === 0 && minutes === 0) {
@@ -335,15 +401,19 @@ export function handleCountDown() {
 
             console.log(seconds, '\ngame over from timer');
 
-            gameOver()
+            gameOver('time\'s up')
         }
 
     }, 1000)
 }
 
-function gameOver() {
+function gameOver(from) {
 
     isGameOver = true
     restartScore.textContent = Score + "."
     document.body.classList.add('over')
+    document.querySelector('.restart-popup p').textContent = from
+    clearInterval(countDownInterval)
+    clearInterval(invadersBulletInterval)
+
 }
