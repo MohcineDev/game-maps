@@ -20,6 +20,7 @@ svg {
 }
 
 body {
+    min-height: 100vh;
     margin: 0;
     display: flex;
     align-items: center;
@@ -50,7 +51,7 @@ body {
     position: absolute;
     top: 600px;
     /* top: 200px; */
-    background: url('./imgs/sqcJgb0.png');
+    background: url('./imgs/sqcJgb.png');
     background-size: cover;
 }
 
@@ -230,7 +231,8 @@ body {
     display: block;
 }
 
-.paused .canvas {
+.paused .canvas,
+.paused .options {
     filter: blur(4px);
 }
 

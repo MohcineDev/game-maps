@@ -1,12 +1,12 @@
-export let moveEnimiesX = 5
-export let moveEnimiesY = 16
+export let moveEnimiesX = 3
+export let moveEnimiesY = 10
 export const movePlayerSpeed = 5
 export let bulletSpeed = 8
 
 const settings = document.querySelector('.settings')
-const HorInput = document.querySelector('.settings #hor input')
-const VerInput = document.querySelector('.settings #ver input')
-const bulletInput = document.querySelector('.settings #bullet input')
+export const HorInput = document.querySelector('.settings #hor input')
+export const VerInput = document.querySelector('.settings #ver input')
+export const bulletInput = document.querySelector('.settings #bullet input')
 
 const minHor = document.querySelector('.settings #hor span:nth-of-type(1)')
 const maxHor = document.querySelector('.settings #hor span:nth-of-type(2)')

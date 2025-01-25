@@ -1,5 +1,5 @@
 import { writeTitle } from './speed.js'
-import { init, enimieContainer, createEnimies, gameLoop} from './script.js'
+import { init, enimieContainer, createEnimies, gameLoop, handleCountDown} from './script.js'
 
 ///game over
 const restartPopup = document.querySelector('.restart-popup')
@@ -23,6 +23,7 @@ startBtn.onclick = () => {
 
 resumeBtn.onclick = () => {
     gameLoop()
+    handleCountDown()
     document.body.classList.add('playing')
     document.body.classList.remove('paused')
 

@@ -1,9 +1,13 @@
-import { moveEnimiesX, moveEnimiesY, movePlayerSpeed, bulletSpeed, writeTitle } from './speed.js'
+import {
+    moveEnimiesX, moveEnimiesY, movePlayerSpeed, bulletSpeed, HorInput
+    , VerInput
+    , bulletInput
+} from './speed.js'
 import { restartScore } from './popups.js'
 
 const canvas = document.querySelector('.canvas')
 const optionsScore = document.querySelector('.options-score span')
-
+const countDown = document.querySelector('.count-down')
 const player = document.querySelector('.player')
 const playerWidth = player.clientWidth
 const canvasREC = canvas.getBoundingClientRect()
@@ -16,8 +20,7 @@ let playerREC = player.getBoundingClientRect()
 
 let playerInitX = canvas.clientWidth / 2 - player.clientWidth / 2
 let playerInitY = canvas.clientHeight - player.clientHeight
-console.log(canvas.clientHeight)
-console.log(player.clientHeight)
+
 let moveHor = playerInitX
 let moveEnimiesHor = 0
 let moveEnimiesVer = 0
@@ -39,26 +42,33 @@ document.addEventListener('keyup', e => {
 
 let canShoot = true
 let playerX = null
-
+let paused = false
 document.addEventListener('keydown', e => {
     keys[e.key] = true
+    HorInput.blur()
+    VerInput.blur()
+    bulletInput.blur()
 
     playerX = getPlayerXRelativeToCanvas(player, canvas)
     //space
     if (e.key === ' ') {
         if (canShoot) {
+            console.log(canShoot);
 
             createBullet(playerX)
 
             canShoot = false
             setTimeout(() => {
                 canShoot = true
-            }, 150)
+            }, 200)
         }
     } else if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
-        canShoot = false
-        document.body.classList.add('paused')
+        console.log('paused');
 
+        canShoot = false
+        paused = true
+        document.body.classList.add('paused')
+        clearInterval(countDownInterval)
         cancelAnimationFrame(REQID)
     }
 })
@@ -190,9 +200,7 @@ function checkForCollision_player_enimie() {
         let enimieREC = enimies[i].getBoundingClientRect()
 
         if (playerREC.top <= enimieREC.bottom) {
-            isGameOver = true
-            restartScore.textContent = Score + "."
-            document.body.classList.add('over')
+            gameOver()
             // restartPopup.style.display = 'block'
         }
     }
@@ -200,8 +208,8 @@ function checkForCollision_player_enimie() {
 
 //////////TODO  : stop the interval on game pause
 
-function enimiesShooting() {
-    let enimies = document.querySelectorAll('.enemy')
+function enemiesShooting() {
+    let invaders = document.querySelectorAll('.enemy')
 
     setInterval(() => {
         howManyEnimiesCanShot = Math.floor(Math.random() * 4)
@@ -210,29 +218,27 @@ function enimiesShooting() {
         }
 
         for (let i = 0; i < howManyEnimiesCanShot; i++) {
-            let enemy = Math.floor(Math.random() * enimies.length)
-            createEnimiesBullet(enimies[enemy])
+            let enemy = Math.floor(Math.random() * invaders.length)
+            createEnimiesBullet(invaders[enemy])
         }
 
-    }, 1500)
+    }, 1000)
 }
-let enimiesBullet = []
+let invadersBullet = []
 
-function moveEnimiesBullet() {
-    console.log(11111111111111111);
-    
+function moveInvadersBullet() {
 
-    for (let i = 0; i < enimiesBullet.length; i++) {
-        console.log("top  : ", enimiesBullet[i].style.top)
-        let bTop = parseInt(enimiesBullet[i].style.top)
+    for (let i = 0; i < invadersBullet.length; i++) {
+
+        let bTop = parseInt(invadersBullet[i].style.top)
         bTop += bulletSpeed
-        enimiesBullet[i].style.top = `${bTop}px`
+        invadersBullet[i].style.top = `${bTop}px`
 
         ///the bullet height
-        if (bTop >=canvasREC.height) {
-            enimiesBullet[i].remove()
+        if (bTop >= canvasREC.height) {
+            invadersBullet[i].remove()
             ///remove the curcreateBulletrent bullet
-            enimiesBullet = enimiesBullet.filter(b => b !== enimiesBullet[i])
+            invadersBullet = invadersBullet.filter(b => b !== invadersBullet[i])
         }
         //        enimiesBullet[i] ? checkForCollision_bullet_enimie(enimiesBullet[i]) : console.log('111111112')
     }
@@ -251,18 +257,18 @@ function createEnimiesBullet(invader) {
     // bullet.style.transform = `translate(50%)`
 
     canvas.appendChild(bullet)
-    enimiesBullet.push(bullet)
+    invadersBullet.push(bullet)
     //  moveBullet()
 }
 
 
 export function gameLoop() {
     if (!isGameOver) {
-        canShoot = true
+
 
         movePlayer()
         moveBullet()
-        moveEnimiesBullet()
+        moveInvadersBullet()
         moveEnimieContainer()
         checkForCollision_player_enimie()
         REQID = requestAnimationFrame(gameLoop)
@@ -274,6 +280,10 @@ export function init() {
     isGameOver = false
     moveEnimiesVer = 0
     enimieContainer.style.transform = `translate(0px,0px)`
+    canShoot = true
+    ///
+    countDown.textContent = '00:10'
+    handleCountDown()
 
     ///restrat popup
     // restartPopup.style.display = 'none'
@@ -290,7 +300,61 @@ export function init() {
     ////////options
     optionsScore.textContent = 0
     Score = 0
-    enimiesShooting()
+    enemiesShooting()
 
     gameLoop()
+}
+
+let countDownInterval = null
+///count-down
+export function handleCountDown() {
+
+    let startCount = countDown.textContent.split(':')
+    let minutes = parseInt(startCount[0])
+    let seconds = parseInt(startCount[1])
+    console.log('seconds : ', seconds)
+
+    if (seconds === 0 && minutes > 0) {
+
+        minutes--
+        seconds = 59
+        countDown.textContent = minutes + ':' + seconds
+    } else if (seconds > 0) {
+        seconds--
+        countDown.textContent = minutes + ':' + seconds
+    }
+
+    countDownInterval = setInterval(() => {
+
+        if (seconds > 0) {
+
+            seconds--
+
+        } else if (minutes > 0) {
+
+            minutes--
+            seconds = 59
+        }
+        let t = minutes + ':' + seconds
+        countDown.textContent = t
+
+
+        if (seconds === 0 && minutes === 0) {
+            clearInterval(countDownInterval)
+
+            console.log(seconds, '\ngame over from timer');
+
+            gameOver()
+        }
+
+    }, 1000)
+
+}
+
+
+function gameOver() {
+
+    isGameOver = true
+    restartScore.textContent = Score + "."
+    document.body.classList.add('over')
 }
