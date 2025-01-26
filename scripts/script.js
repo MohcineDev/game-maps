@@ -152,23 +152,52 @@ export function createEnimies() {
 createEnimies()
 
 let reverse = false
+function containerEdge() {
+    const invaders = document.querySelectorAll('.enemy')
+    let left = canvasREC.right
+    let right = canvasREC.left
 
+    invaders.forEach(i => {
+
+        const enemyREC = i.getBoundingClientRect()
+
+        if (enemyREC.left < left)
+            left = enemyREC.left
+        if (enemyREC.right > right)
+            right = enemyREC.right
+
+    })
+    return { left, right }
+}
 function moveEnimieContainer() {
-    const enimieREC = enimieContainer.getBoundingClientRect()
+    // const enimieREC = enimieContainer.getBoundingClientRect()
+    const { left, right } = containerEdge()
+    console.log(right, canvasREC.right);
 
-    if (!reverse && enimieREC.right < canvasREC.right) {
+    // if (!reverse && enimieREC.right < canvasREC.right) {
+    //     moveEnimiesHor += moveEnimiesX
+    // } else if (!reverse && enimieREC.right >= canvasREC.right) {
+    //     reverse = true
+    //     moveEnimiesVer += moveEnimiesY
+    // }
+    if (!reverse && right < canvasREC.right) {
         moveEnimiesHor += moveEnimiesX
-    } else if (!reverse && enimieREC.right >= canvasREC.right) {
+    } else if (!reverse && right >= canvasREC.right) {
         reverse = true
         moveEnimiesVer += moveEnimiesY
     }
-
-    if (reverse && enimieREC.left > canvasREC.left) {
+    if (reverse && left > canvasREC.left) {
         moveEnimiesHor -= moveEnimiesX
-    } else if (reverse && enimieREC.left <= canvasREC.left) {
+    } else if (reverse && left <= canvasREC.left) {
         reverse = false
         moveEnimiesVer += moveEnimiesY
     }
+    // if (reverse && enimieREC.left > canvasREC.left) {
+    //     moveEnimiesHor -= moveEnimiesX
+    // } else if (reverse && enimieREC.left <= canvasREC.left) {
+    //     reverse = false
+    //     moveEnimiesVer += moveEnimiesY
+    // }
 
     enimieContainer.style.transform = `translate(${moveEnimiesHor}px,${moveEnimiesVer}px)`
 }
