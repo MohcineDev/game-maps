@@ -7,6 +7,7 @@ const countDown = document.querySelector('.count-down')
 const player = document.querySelector('.player')
 const playerWidth = player.clientWidth
 const canvasREC = canvas.getBoundingClientRect()
+const livesHeart = Array.from(document.querySelectorAll(`.options-lives svg`))
 
 let Score = 0
 let REQID = null
@@ -148,6 +149,7 @@ export function createEnimies() {
     }
 
 }
+createEnimies()
 
 let reverse = false
 
@@ -208,18 +210,33 @@ function checkForCollision_player_enimie() {
 let invadersBulletInterval = null
 
 export function enemiesShooting() {
-    let invaders = document.querySelectorAll('.enemy')
-
     invadersBulletInterval = setInterval(() => {
+        let invaders = document.querySelectorAll('.enemy')
+
+        console.log(invaders.length);
+
         howManyEnimiesCanShot = Math.floor(Math.random() * 4)
         if (howManyEnimiesCanShot === 0) {
             howManyEnimiesCanShot++
         }
 
-        for (let i = 0; i < howManyEnimiesCanShot; i++) {
-            let enemy = Math.floor(Math.random() * invaders.length)
-            createEnimiesBullet(invaders[enemy])
+        // for (let i = 0; i < howManyEnimiesCanShot; i++) {
+        /////logic for choosing enemies from different indexes
+        let chosenEnimies = new Set()
+        const enemiesAvailable = invaders.length
+        if (invaders) {
+
+            while (chosenEnimies.size < Math.min(howManyEnimiesCanShot, invaders.length)) {
+
+                const enemy = Math.floor(Math.random() * invaders.length)
+                chosenEnimies.add(enemy)
+            }
+            if (invadersBullet.length < 10) { // limit bullets on screenn
+                chosenEnimies.forEach(enemy => createEnimiesBullet(invaders[enemy]))
+            }
+
         }
+        // }
 
     }, 1000)
 }
@@ -237,25 +254,31 @@ function moveInvadersBullet() {
         if (bTop >= canvasREC.height) {
             invadersBullet[i].remove()
             ///remove the curcreateBulletrent bullet if it reaches canvas end
-            invadersBullet = invadersBullet.filter(b => b !== invadersBullet[i])
+            // invadersBullet = invadersBullet.filter(b => b !== invadersBullet[i])
+            invadersBullet.splice(i, 1)
+            i--
+            continue
         }
-        invadersBullet[i] ? checkForCollision_player_invaderBullet(invadersBullet[i]) : console.log('111111112')
-    }
+        if (invadersBullet[i])
+            checkForCollision_player_invaderBullet(invadersBullet[i])
 
+    }
 }
 
-createEnimies()
 
 function createEnimiesBullet(invader) {
-    let invaderREC = invader.getBoundingClientRect()
-    const bullet = document.createElement('span')
-    bullet.classList.add('invader-bullet')
-    bullet.style.left = `${invaderREC.left - canvasREC.left + (invaderREC.width / 2)}px`
-    bullet.style.top = `${invaderREC.top - canvasREC.top + invaderREC.height - 5}px`
-    // bullet.style.transform = `translate(50%)`
+    if (invader) {
 
-    canvas.appendChild(bullet)
-    invadersBullet.push(bullet)
+        let invaderREC = invader.getBoundingClientRect()
+        const bullet = document.createElement('span')
+        bullet.classList.add('invader-bullet')
+        bullet.style.left = `${invaderREC.left - canvasREC.left + (invaderREC.width / 2)}px`
+        bullet.style.top = `${invaderREC.top - canvasREC.top + invaderREC.height - 5}px`
+        // bullet.style.transform = `translate(50%)`
+
+        canvas.appendChild(bullet)
+        invadersBullet.push(bullet)
+    }
     //  moveBullet()
 }
 
@@ -342,25 +365,27 @@ export function init() {
     restartScore.textContent = 0
 
     //lives
-    Array.from(document.querySelectorAll(`.options-lives svg`), elem => elem.style.display = 'block')
+    // Array.from(document.querySelectorAll(`.options-lives svg`), elem => elem.style.display = 'block')
+    livesHeart.forEach(elem => elem.style.display = 'block')
     //////////////remove bulllllets
-    const DOM_bullets = document.querySelectorAll('.bullet')
-    const DOM_invader_bullet = document.querySelectorAll('.invader-bullet')
 
-    bullets = []
-    invadersBullet = []
-    DOM_bullets.forEach(elem => {
-        elem.remove()
-    });
-    DOM_invader_bullet.forEach(elem => {
-        elem.remove()
-    });
+
+    removeDOMBullets()
     ////////options
     optionsScore.textContent = 0
     Score = 0
     enemiesShooting()
 
     gameLoop()
+}
+function removeDOMBullets() {
+    const DOM_bullets = document.querySelectorAll('.bullet, .invader-bullet')
+    DOM_bullets.forEach(elem => {
+        elem.remove()
+    })
+
+    bullets = []
+    invadersBullet = []
 }
 
 let countDownInterval = null
@@ -414,6 +439,8 @@ function gameOver(from) {
     document.body.classList.add('over')
     document.querySelector('.restart-popup p').textContent = from
     clearInterval(countDownInterval)
+    countDownInterval = null
     clearInterval(invadersBulletInterval)
+    invadersBulletInterval = null
 
 }

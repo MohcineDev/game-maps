@@ -135,7 +135,7 @@ body {
 .options-lives svg:last-child, .heartbeat {
     animation-name: scale;
     animation-delay: 1s;
-    animation-duration: 1s;
+    animation-duration: 0.8s;
     animation-iteration-count: infinite;
     margin-left: 5px;
 }
