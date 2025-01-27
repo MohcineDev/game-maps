@@ -181,7 +181,7 @@ body {
     text-align: center;
 }
 
-.popup h1,.popup p {
+.popup h1, .popup p {
     font-size: 2.5rem;
     margin: 0;
     text-shadow: 0 3px 0px red, 0 -3px 0px aqua;
@@ -251,29 +251,32 @@ body {
 }
 
 /* //////////settings   */
-nav{
+nav {
     position: absolute;
     top: 5px;
     left: 5px;
 }
-nav svg{
+
+nav svg {
 
     width: 20px;
     position: absolute;
     left: 0;
     top: 0;
 }
+
 .settings {
     position: absolute;
     z-index: 3;
-    left: 10px;
-    top: 10px;
+    left: 7px;
+    top: 4px;
     box-shadow: var(--pop-shadow);
     border-radius: 5px;
     margin: 10px;
     max-height: 0px;
     overflow: hidden;
     transition: max-height 0.3s;
+    background: rgba(100,60,200,0.2);
 }
 
 .open {
@@ -336,4 +339,19 @@ nav svg{
 
 footer {
     margin-top: 7rem;
+}
+
+.expl {
+    display: none;
+    width: 5px;
+    height: 5px;
+    background-color: orange;
+    position: absolute;
+    z-index: 2;
+}
+.todo{
+    position: absolute;
+    left: 10px;
+    bottom: 0;
+    color: #888;
 }

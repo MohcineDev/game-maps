@@ -19,12 +19,16 @@ const horValue = document.querySelector('[for="hor"] em')
 const verValue = document.querySelector('[for="ver"] em')
 const bulletValue = document.querySelector('[for="bullet"] em')
 const open = document.querySelector('nav #open')
+
+horValue.textContent = HorInput.value
 minHor.textContent = HorInput.min
 maxHor.textContent = HorInput.max
 
+verValue.textContent = VerInput.value
 minVer.textContent = VerInput.min
 maxVer.textContent = VerInput.max
 
+bulletValue.textContent = bulletInput.value
 minBullet.textContent = bulletInput.min
 maxBullet.textContent = bulletInput.max
 

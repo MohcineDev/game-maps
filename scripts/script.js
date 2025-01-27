@@ -172,7 +172,6 @@ function containerEdge() {
 function moveEnimieContainer() {
     // const enimieREC = enimieContainer.getBoundingClientRect()
     const { left, right } = containerEdge()
-    console.log(right, canvasREC.right);
 
     // if (!reverse && enimieREC.right < canvasREC.right) {
     //     moveEnimiesHor += moveEnimiesX
@@ -310,16 +309,27 @@ function createEnimiesBullet(invader) {
     }
     //  moveBullet()
 }
+const explosion = document.querySelector('.expl')
 
 let player_invaderBullet = false
+let Explo = {
+    hide: false,
+    time: 0
+}
 function checkForCollision_player_invaderBullet(bullet) {
+    //logic for display explo
+    if (Explo.time === 10) {
+        Explo.hide = false
+        Explo.time = 0
+        explosion.style.display = 'none'
+    }
 
     let bulletREC = bullet.getBoundingClientRect()
     let playerREC = player.getBoundingClientRect()
 
     // console.log(bulletREC.top, playerREC.top)
 
-    if (playerREC.top < bulletREC.top
+    if (playerREC.top < bulletREC.bottom
 
         ///check bullet right with player left
         && playerREC.left <= bulletREC.right && playerREC.right >= bulletREC.right
@@ -328,10 +338,15 @@ function checkForCollision_player_invaderBullet(bullet) {
 
     ) {
         bullet.remove()
-        updateLives()
+        Explo.hide = true
+
+        explosion.style.display = 'block'
+        explosion.style.left = bulletREC.left + 'px'
+        explosion.style.top = bulletREC.bottom + 'px'
 
         console.log(playerREC.left, "<", bulletREC.right);
         player_invaderBullet = true
+        updateLives()
         console.log("hit");
 
         // bullet.remove()
@@ -367,7 +382,9 @@ function updateLives() {
 
 export function gameLoop() {
     if (!isGameOver) {
-
+        if (Explo.hide) {
+            Explo.time++
+        }
         movePlayer()
         moveBullet()
         moveInvadersBullet()
@@ -462,7 +479,7 @@ export function handleCountDown() {
 }
 
 function gameOver(from) {
-
+    gameSetting.canShoot = false
     isGameOver = true
     restartScore.textContent = Score + "."
     document.body.classList.add('over')
@@ -471,5 +488,9 @@ function gameOver(from) {
     countDownInterval = null
     clearInterval(invadersBulletInterval)
     invadersBulletInterval = null
+//
+    Explo.hide = false
+    Explo.time = 0
+    explosion.style.display = 'none'
 
 }

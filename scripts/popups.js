@@ -1,5 +1,5 @@
 import { writeTitle } from './speed.js'
-import {gameSetting, init, enimieContainer, createEnimies, gameLoop, handleCountDown , enemiesShooting} from './script.js'
+import { gameSetting, init, enimieContainer, createEnimies, gameLoop, handleCountDown, enemiesShooting } from './script.js'
 
 ///game over
 const restartPopup = document.querySelector('.restart-popup')
@@ -49,13 +49,14 @@ document.addEventListener('keyup', e => {
             startBtn.click()
             console.log('start btn')
         }
-        else if (restartPopup.checkVisibility()) {
-            console.log('restart btn')
-            restartBtn.click()
-        } else if (pausePopup.checkVisibility()) {
+        else if (pausePopup.checkVisibility()) {
             console.log('resume btn')
             resumeBtn.click()
         }
-
+        ////restart do it manually
+        // else if (restartPopup.checkVisibility()) {
+        //     console.log('restart btn')
+        //     restartBtn.click()
+        // }
     }
 })
