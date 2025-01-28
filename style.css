@@ -51,9 +51,8 @@ body {
     position: absolute;
     top: 600px;
     /* top: 200px; */
-    background: url('./imgs/sqcJgb.png');
+    background: url('./imgs/p0.png');
     background-size: cover;
-    border: 1px solid #fff;
 }
 
 .pause {
@@ -71,11 +70,11 @@ body {
 }
 
 .invader-bullet {
-    width: 4px;
+    width: 5px;
     height: 20px;
-    border: var(--col3) dotted;
-    border-width: 0 4px;
-    /* background-color: var(--col3); */
+    /* border: var(--col3) dotted; */
+    /* border-width: 0 4px; */
+    background-color: var(--col3);
     position: absolute;
 }
 
@@ -88,7 +87,6 @@ body {
     /* background-color: red; */
 }
 
-.enimieContainer {}
 
 @keyframes alterBg {
     0% {
@@ -132,7 +130,8 @@ body {
 
 }
 
-.options-lives svg:last-child, .heartbeat {
+.options-lives svg:last-child,
+.heartbeat {
     animation-name: scale;
     animation-delay: 1s;
     animation-duration: 0.8s;
@@ -181,7 +180,8 @@ body {
     text-align: center;
 }
 
-.popup h1, .popup p {
+.popup h1,
+.popup p {
     font-size: 2.5rem;
     margin: 0;
     text-shadow: 0 3px 0px red, 0 -3px 0px aqua;
@@ -218,7 +218,8 @@ body {
     margin: 0;
 }
 
-.playing .start-popup, .playing .pause-popup {
+.playing .start-popup,
+.playing .pause-popup {
     display: none;
 }
 
@@ -276,7 +277,7 @@ nav svg {
     max-height: 0px;
     overflow: hidden;
     transition: max-height 0.3s;
-    background: rgba(100,60,200,0.2);
+    background: rgba(100, 60, 200, 0.2);
 }
 
 .open {
@@ -316,9 +317,41 @@ nav svg {
     cursor: pointer;
     margin: 0 5px;
 }
+ 
+
+.expl {
+    display: none;
+    width: 25px;
+    height: 25px;
+    /* background-color: orange; */
+    position: absolute;
+    z-index: 2;
+    background-image: url('./imgs/9YD9hk.gif');
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}
+
+.todo {
+    position: absolute;
+    left: 10px;
+    bottom: 0;
+    color: #888;
+}
+
+.win .game-win-popup {
+    display: block;
+}
+
+.win .canvas,
+.win .options {
+    filter: blur(4px);
+}
 
 @media screen and (max-width:580px) {
-    .canvas, .options {
+
+    .canvas,
+    .options {
         width: 420px;
     }
 
@@ -328,30 +361,13 @@ nav svg {
 }
 
 @media screen and (max-width:380px) {
-    .canvas, .options {
+
+    .canvas,
+    .options {
         width: 280px;
     }
 
     .popup {
         width: 180px;
     }
-}
-
-footer {
-    margin-top: 7rem;
-}
-
-.expl {
-    display: none;
-    width: 5px;
-    height: 5px;
-    background-color: orange;
-    position: absolute;
-    z-index: 2;
-}
-.todo{
-    position: absolute;
-    left: 10px;
-    bottom: 0;
-    color: #888;
 }

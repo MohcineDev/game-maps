@@ -14,8 +14,10 @@
     <div class="todo">
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TODO  : </p>
         <p>- add game win</p>
-        <p>- add gif for explo</p>
-        <p>- adjust player w/h</p>
+        <p>- <s>add gif for explo</s> </p>
+        <p>- <s>adjust player w/h</s> </p>
+        <p>- prevent spamming keys </p>
+        <p>- invader bullet hit the player correctly</p>
     </div>
     <nav>
         <svg id="open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
@@ -29,7 +31,7 @@
                 <label for="hor">- Enimies Hor Speed : <em></em> </label>
                 <div id="hor">
                     <span></span>
-                    <input type="range" name="" min="2" max="20">
+                    <input type="range" name="" min="2" max="10">
                     <span></span>
                 </div>
             </div>
@@ -37,7 +39,7 @@
                 <label for="ver">- Enimies Ver Speed : <em></em></label>
                 <div id="ver">
                     <span></span>
-                    <input type="range" name="" min="5" max="100">
+                    <input type="range" name="" min="5" max="50">
                     <span></span>
 
                 </div>
@@ -53,10 +55,14 @@
         </div>
     </nav>
 <!-- TODO : win popup -->
-    <div class="start-popup popup">
-        <h1># </h1>
-        <button>Start</button>
-    </div>
+<div class="game-win-popup popup">
+    <h1>You win</h1>
+    <button>play again</button>
+</div>
+<div class="start-popup popup">
+    <h1># </h1>
+    <button>Start</button>
+</div>
     <div class="restart-popup popup">
         <h1>GAME OVER</h1>
         <h1>score : <span>0</span> </h1>

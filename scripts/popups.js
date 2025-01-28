@@ -4,10 +4,11 @@ import { gameSetting, init, enimieContainer, createEnimies, gameLoop, handleCoun
 ///game over
 const restartPopup = document.querySelector('.restart-popup')
 const restartBtn = restartPopup.querySelector('button')
+const gameWinBtn = document.querySelector('.game-win-popup button')
 export const restartScore = restartPopup.querySelector('span')
 
 //start Popup
-const startPopup = document.querySelector('.start-popup')
+export const startPopup = document.querySelector('.start-popup')
 const startBtn = startPopup.querySelector('button')
 
 //pause Popup
@@ -32,12 +33,14 @@ resumeBtn.onclick = () => {
 }
 
 restartBtn.onclick = () => restartGAME()
-
+gameWinBtn.onclick = () => restartGAME()
 
 function restartGAME() {
     enimieContainer.innerHTML = ''
     createEnimies()
     document.body.classList.remove('over')
+    ///remove wwin if exist
+    document.body.classList.remove('win')
     init()
 }
 

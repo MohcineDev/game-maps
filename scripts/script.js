@@ -1,5 +1,5 @@
 import { moveEnimiesX, moveEnimiesY, movePlayerSpeed, bulletSpeed, HorInput, VerInput, bulletInput } from './speed.js'
-import { restartScore } from './popups.js'
+import { restartScore, startPopup } from './popups.js'
 
 const canvas = document.querySelector('.canvas')
 const optionsScore = document.querySelector('.options-score span')
@@ -137,6 +137,7 @@ enimieContainer.classList.add('enimieContainer')
 canvas.appendChild(enimieContainer)
 
 export function createEnimies() {
+
     for (let index = 0; index < 5; index++) {
         for (let j = 0; j < 3; j++) {
             const ghostDiv = document.createElement('div')
@@ -200,13 +201,15 @@ function moveEnimieContainer() {
 
     enimieContainer.style.transform = `translate(${moveEnimiesHor}px,${moveEnimiesVer}px)`
 }
+
+///collision between player bullet and the invader
 function checkForCollision_bullet_enimie(bullet) {
 
-    let enimies = document.querySelectorAll('.enemy')
+    let invaders = document.querySelectorAll('.enemy')
     let bulletREC = bullet.getBoundingClientRect()
 
-    for (let i = 0; i < enimies.length; i++) {
-        let enimieREC = enimies[i].getBoundingClientRect()
+    for (let i = 0; i < invaders.length; i++) {
+        let enimieREC = invaders[i].getBoundingClientRect()
 
         if (enimieREC.left < bulletREC.left && enimieREC.right > bulletREC.right &&
             enimieREC.top < bulletREC.top && enimieREC.bottom > bulletREC.bottom
@@ -214,13 +217,17 @@ function checkForCollision_bullet_enimie(bullet) {
             Score += 10
             optionsScore.textContent = Score
             bullet.remove()
-            enimies[i].remove()
+            invaders[i].remove()
         }
+    }
+    if (invaders.length === 0) {
+        gameWin()
     }
 }
 
 let howManyEnimiesCanShot = 0
 
+///collision between enemies and the player
 function checkForCollision_player_enimie() {
     let enimies = document.querySelectorAll('.enemy')
 
@@ -316,9 +323,10 @@ let Explo = {
     hide: false,
     time: 0
 }
+///collisoin between player and invaders bullet
 function checkForCollision_player_invaderBullet(bullet) {
     //logic for display explo
-    if (Explo.time === 10) {
+    if (Explo.time === 50) {
         Explo.hide = false
         Explo.time = 0
         explosion.style.display = 'none'
@@ -362,6 +370,7 @@ function updateLives() {
         if (lives === 0) {
             isGameOver = true
             document.querySelector(`.options-lives svg:nth-of-type(${lives + 1})`).classList.remove('heartbeat')
+            document.querySelector(`.options-lives svg:nth-of-type(${lives + 1})`).style.display = 'none'
             gameOver('lives indedddddd')
         }
         if (lives > 0) {
@@ -403,6 +412,12 @@ export function init() {
     enimieContainer.style.transform = `translate(0px,0px)`
     gameSetting.canShoot = true
     ///
+    ///remove from gameover
+    clearInterval(countDownInterval)
+    countDownInterval = null
+    clearInterval(invadersBulletInterval)
+    invadersBulletInterval = null
+
     countDown.textContent = '01:10'
     handleCountDown()
 
@@ -432,6 +447,7 @@ function removeDOMBullets() {
 
     bullets = []
     invadersBullet = []
+
 }
 
 let countDownInterval = null
@@ -484,13 +500,18 @@ function gameOver(from) {
     restartScore.textContent = Score + "."
     document.body.classList.add('over')
     document.querySelector('.restart-popup p').textContent = from
-    clearInterval(countDownInterval)
-    countDownInterval = null
-    clearInterval(invadersBulletInterval)
-    invadersBulletInterval = null
-//
+
+    //
     Explo.hide = false
     Explo.time = 0
     explosion.style.display = 'none'
 
+}
+
+function gameWin() {
+    isGameOver = true
+
+    gameSetting.canShoot = false
+    restartScore.textContent = Score + "."
+    document.body.classList.add('win')
 }
