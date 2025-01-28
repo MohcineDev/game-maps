@@ -8,7 +8,7 @@ const player = document.querySelector('.player')
 const playerWidth = player.clientWidth
 const canvasREC = canvas.getBoundingClientRect()
 const livesHeart = Array.from(document.querySelectorAll(`.options-lives svg`))
-
+const winScore = document.querySelector('.game-win-popup h1 span')
 let Score = 0
 let REQID = null
 export let isGameOver = false
@@ -42,9 +42,11 @@ export let gameSetting = {
 }
 let playerX = null
 let paused = false
-
 document.addEventListener('keydown', e => {
+    console.log(keys);
+
     keys[e.key] = true
+
     HorInput.blur()
     VerInput.blur()
     bulletInput.blur()
@@ -83,7 +85,7 @@ function movePlayer() {
     //player x pos
     const playerX = getPlayerXRelativeToCanvas(player, canvas)
 
-    if (keys['ArrowLeft'] && playerX > 0) {
+    if (keys['ArrowLeft'] && playerX > 0 && gameSetting.canShoot == true) {
         moveHor -= movePlayerSpeed
     }
 
@@ -245,7 +247,7 @@ function checkForCollision_player_enimie() {
 let invadersBulletInterval = null
 
 export function enemiesShooting() {
-    invadersBulletInterval = setInterval(() => {
+    //invadersBulletInterval = setInterval(() => {
         let invaders = document.querySelectorAll('.enemy')
 
         console.log(invaders.length);
@@ -273,7 +275,7 @@ export function enemiesShooting() {
         }
         // }
 
-    }, 1000)
+    //}, 1000)
 }
 let invadersBullet = []
 
@@ -388,9 +390,18 @@ function updateLives() {
 
 
 //////////
-
+let counter = 0
 export function gameLoop() {
+
     if (!isGameOver) {
+        counter++
+        if (counter == 60) {
+            handleCountDown()
+console.log(111111111111);
+enemiesShooting()
+
+            counter = 0
+        }
         if (Explo.hide) {
             Explo.time++
         }
@@ -401,6 +412,7 @@ export function gameLoop() {
         checkForCollision_player_enimie()
         REQID = requestAnimationFrame(gameLoop)
     }
+
 }
 
 
@@ -419,7 +431,7 @@ export function init() {
     invadersBulletInterval = null
 
     countDown.textContent = '01:10'
-    handleCountDown()
+    // handleCountDown()
 
     ///restrat popup
     // restartPopup.style.display = 'none'
@@ -435,7 +447,7 @@ export function init() {
     ////////options
     optionsScore.textContent = 0
     Score = 0
-    enemiesShooting()
+    // enemiesShooting()
 
     gameLoop()
 }
@@ -467,33 +479,52 @@ export function handleCountDown() {
         seconds = 59
         countDown.textContent = minutes + ':' + seconds
     } else if (seconds > 0) {
-        seconds--
+       // seconds--
         countDown.textContent = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`
     }
+    rerer(seconds, minutes)
+    // countDownInterval = setInterval(() => {
 
-    countDownInterval = setInterval(() => {
+        // if (seconds > 0) {
+        //     seconds--
+        // } else if (minutes > 0) {
 
-        if (seconds > 0) {
-            seconds--
-        } else if (minutes > 0) {
+        //     minutes--
+        //     seconds = 59
+        // }
+        // let t = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`
+        // countDown.textContent = t
 
-            minutes--
-            seconds = 59
-        }
-        let t = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`
-        countDown.textContent = t
+        // if (seconds === 0 && minutes === 0) {
+        //     clearInterval(countDownInterval)
 
-        if (seconds === 0 && minutes === 0) {
-            clearInterval(countDownInterval)
+        //     console.log(seconds, '\ngame over from timer');
 
-            console.log(seconds, '\ngame over from timer');
+        //     gameOver('time\'s up')
+        // }
 
-            gameOver('time\'s up')
-        }
-
-    }, 1000)
+    // }, 1000)
 }
+function rerer(seconds, minutes){
+    if (seconds > 0) {
+        seconds--
+    } else if (minutes > 0) {
 
+        minutes--     
+        seconds = 59
+    }
+    let t = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`
+    countDown.textContent = t
+
+    if (seconds === 0 && minutes === 0) {
+        clearInterval(countDownInterval)
+
+        console.log(seconds, '\ngame over from timer');
+
+        gameOver('time\'s up')
+    }
+
+}
 function gameOver(from) {
     gameSetting.canShoot = false
     isGameOver = true
@@ -501,6 +532,10 @@ function gameOver(from) {
     document.body.classList.add('over')
     document.querySelector('.restart-popup p').textContent = from
 
+    clearInterval(countDownInterval)
+    countDownInterval = null
+    clearInterval(invadersBulletInterval)
+    invadersBulletInterval = null
     //
     Explo.hide = false
     Explo.time = 0
@@ -512,6 +547,7 @@ function gameWin() {
     isGameOver = true
 
     gameSetting.canShoot = false
-    restartScore.textContent = Score + "."
+
+    winScore.textContent = Score + "."
     document.body.classList.add('win')
 }
