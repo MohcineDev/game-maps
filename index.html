@@ -13,25 +13,27 @@
     <!-- <div class="counter">0</div> -->
     <span class="expl"></span>
     <div class="todo">
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TODO  : </p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TODO : </p>
 
         <p>- <s>add restart btn on pause</s> </p>
         <p>- <s>add game win</s></p>
         <p>- <s>add game win</s></p>
         <p>- <s>add game win</s></p>
+        <p>- add history</p>
+        <p>- adjust invaders img size</p>
         <p>- <s>add gif for explo</s> </p>
         <p>- <s>adjust player w/h</s> </p>
         <p>- prevent spamming keys </p>
         <p>- <s>invader bullet hit the player correctly</s> </p>
     </div>
     <nav>
-        <svg id="open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+        <svg tabindex="1" id="open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
             <polygon fill="#fff" points="4 8 4 13 50 13 50 8 " />
             <polygon fill="#fff" points="4 20 4 25 50 25 50 20 " />
             <polygon fill="#fff" points="4 32 4 37 50 37 50 32 " />
         </svg>
         <div class="settings">
-                    
+
             <div>
                 <label for="hor">- Enimies Hor Speed : <em></em> </label>
                 <div id="hor">
@@ -59,22 +61,22 @@
             </div>
         </div>
     </nav>
-<!-- TODO : win popup -->
-<div class="game-win-popup popup">
-    <h1>You win</h1>
-    <h1>Score : <span>0</span></h1>
+    <!-- TODO : win popup -->
+    <div class="game-win-popup popup">
+        <h1>You win</h1>
+        <h1>Score : <span>0</span></h1>
 
-    <button>play again</button>
-</div>
-<div class="start-popup popup">
-    <h1># </h1>
-    <button>Start</button>
-</div>
+        <button tabindex="2">play again</button>
+    </div>
+    <div class="start-popup popup">
+        <h1># </h1>
+        <button tabindex="2">Start</button>
+    </div>
     <div class="restart-popup popup">
         <h1>GAME OVER</h1>
         <h1>score : <span>0</span> </h1>
         <p></p>
-        <button>restart</button>
+        <button tabindex="2">restart</button>
 
     </div>
     <div class="pause-popup popup">

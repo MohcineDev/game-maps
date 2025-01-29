@@ -52,7 +52,6 @@ export let gameSetting = {
 let playerX = null
 let paused = false
 document.addEventListener('keydown', e => {
-    console.log(keys);
 
     keys[e.key] = true
 
@@ -124,7 +123,8 @@ function moveBullet() {
             ///remove the curcreateBulletrent bullet
             bullets = bullets.filter(b => b !== bullets[i])
         }
-        bullets[i] ? checkForCollision_bullet_enimie(bullets[i]) : console.log('111111112')
+        bullets[i] ? (checkForCollision_bullet_enimie(bullets[i])
+            , collision_between_bullets(bullets[i])) : null
     }
 
 }
@@ -217,6 +217,39 @@ function moveEnimieContainer() {
     enimieContainer.style.transform = `translate(${moveEnimiesHor}px,${moveEnimiesVer}px)`
 }
 
+///colision betweeeeeen bullets
+function collision_between_bullets(player_bullet) {
+    let player_bullet_REC = player_bullet.getBoundingClientRect()
+    if (Explo.time === 50) {
+        Explo.hide = false
+        Explo.time = 0
+        explosion.style.display = 'none'
+    }
+
+    for (let i = 0; i < invadersBullet.length; i++) {
+        let invadersBullet_REC = invadersBullet[i].getBoundingClientRect()
+
+        if (player_bullet_REC.top < invadersBullet_REC.bottom &&
+            (player_bullet_REC.left <= invadersBullet_REC.right 
+                && player_bullet_REC.left > invadersBullet_REC.left
+                ||
+                player_bullet_REC.right > invadersBullet_REC.left && player_bullet_REC.right < invadersBullet_REC.right
+                )
+        ) {
+
+            Explo.hide = true
+            
+            explosion.style.display = 'block'
+            explosion.style.left = player_bullet_REC.left + 'px'
+            explosion.style.top = player_bullet_REC.bottom + 'px'
+        
+            player_bullet.remove()
+            invadersBullet[i].remove()
+        }
+    }
+
+}
+
 ///collision between player bullet and the invader
 function checkForCollision_bullet_enimie(bullet) {
 
@@ -263,7 +296,6 @@ export function enemiesShooting() {
     //invadersBulletInterval = setInterval(() => {
     let invaders = document.querySelectorAll('.enemy')
 
-    console.log(invaders.length);
 
     howManyEnimiesCanShot = Math.floor(Math.random() * 4)
     if (howManyEnimiesCanShot === 0) {
@@ -273,7 +305,6 @@ export function enemiesShooting() {
     // for (let i = 0; i < howManyEnimiesCanShot; i++) {
     /////logic for choosing enemies from different indexes
     let chosenEnimies = new Set()
-    const enemiesAvailable = invaders.length
     if (invaders) {
 
         while (chosenEnimies.size < Math.min(howManyEnimiesCanShot, invaders.length)) {
@@ -346,6 +377,7 @@ function checkForCollision_player_invaderBullet(bullet) {
         Explo.time = 0
         explosion.style.display = 'none'
     }
+    
 
     let bulletREC = bullet.getBoundingClientRect()
     let playerREC = player.getBoundingClientRect()
@@ -368,7 +400,6 @@ function checkForCollision_player_invaderBullet(bullet) {
         explosion.style.left = bulletREC.left + 'px'
         explosion.style.top = bulletREC.bottom + 'px'
 
-        console.log(playerREC.left, "<", bulletREC.right);
         player_invaderBullet = true
         updateLives()
         console.log("hit");
@@ -378,7 +409,6 @@ function checkForCollision_player_invaderBullet(bullet) {
     }
 }
 
-/////TODO if time is up and you paused ==> pause countdown in game pausd case
 function updateLives() {
     if (player_invaderBullet) {
 
@@ -387,7 +417,7 @@ function updateLives() {
             isGameOver = true
             document.querySelector(`.options-lives svg:nth-of-type(${lives + 1})`).classList.remove('heartbeat')
             document.querySelector(`.options-lives svg:nth-of-type(${lives + 1})`).style.display = 'none'
-            gameOver('lives indedddddd')
+            gameOver('0 lives KFC')
         }
         if (lives > 0) {
             document.querySelector(`.options-lives svg:nth-of-type(${lives + 1})`).style.display = 'none'
@@ -396,7 +426,6 @@ function updateLives() {
             document.querySelector(`.options-lives svg:nth-of-type(${lives})`).classList.add('heartbeat')
         }
 
-        console.log(lives);
         player_invaderBullet = false
 
     }
@@ -410,7 +439,6 @@ export function gameLoop() {
         counter++
         if (counter == 60) {
             handleCountDown()
-            console.log(111111111111);
             enemiesShooting()
 
             counter = 0
@@ -489,11 +517,9 @@ let countDownInterval = null
 export function handleCountDown() {
 
     let startCount = countDown.textContent.split(':')
-    console.log(countDown.textContent);
 
     let minutes = parseInt(startCount[0])
     let seconds = parseInt(startCount[1])
-    console.log('seconds : ', seconds)
 
     if (seconds === 0 && minutes > 0) {
 

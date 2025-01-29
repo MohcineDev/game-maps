@@ -109,6 +109,7 @@ body {
     margin: 20px;
     background: #000;
     background: url('./imgs/1.webp');
+    background: rgba(196, 60, 200, 0.2);
     box-sizing: border-box;
     color: var(--col1);
     font-size: 1.3rem;
@@ -200,7 +201,7 @@ body {
     letter-spacing: 2px;
     text-transform: uppercase;
     border: 2px solid var(--col2);
-    background: url('./imgs/1.webp'), #5c0c0c;
+    background: rgba(71, 60, 200, 0.2);
     text-shadow: 0 2px 0px red, 0 -2px 0px aqua;
     box-shadow: 0 0 7px #d10f36 inset, 0 0 7px 2px var(--col1);
 }
@@ -233,10 +234,12 @@ body {
 .paused .pause-popup {
     display: block;
 }
-.pause-popup .btns{
+
+.pause-popup .btns {
     display: flex;
-  gap: 30px;
+    gap: 30px;
 }
+
 .paused .canvas,
 .paused .options {
     filter: blur(4px);
@@ -247,6 +250,10 @@ body {
 
 .over .restart-popup {
     display: block;
+}
+
+.over .restart-popup h1:nth-child(1) {
+    color: crimson;
 }
 
 .over .canvas,
@@ -320,7 +327,7 @@ nav svg {
     cursor: pointer;
     margin: 0 5px;
 }
- 
+
 
 .expl {
     display: none;
