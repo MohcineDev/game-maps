@@ -13,7 +13,8 @@ const startBtn = startPopup.querySelector('button')
 
 //pause Popup
 const pausePopup = document.querySelector('.pause-popup')
-const resumeBtn = pausePopup.querySelector('button')
+const pauseRestartBtn = pausePopup.querySelector('button:nth-of-type(1)')
+const pauseResumeBtn = pausePopup.querySelector('button:nth-of-type(2)')
 
 writeTitle(startPopup.querySelector('h1'), 'Space invader #')
 
@@ -22,7 +23,7 @@ startBtn.onclick = () => {
     document.body.classList.add('playing')
 }
 
-resumeBtn.onclick = () => {
+pauseResumeBtn.onclick = () => {
     gameSetting.canShoot = true
     gameLoop()
     handleCountDown()
@@ -32,6 +33,7 @@ resumeBtn.onclick = () => {
 
 }
 
+pauseRestartBtn.onclick = () => restartGAME()
 restartBtn.onclick = () => restartGAME()
 gameWinBtn.onclick = () => restartGAME()
 
@@ -41,6 +43,10 @@ function restartGAME() {
     document.body.classList.remove('over')
     ///remove wwin if exist
     document.body.classList.remove('win')
+    
+    ///remove paused if exist
+    document.body.classList.remove('paused')
+
     init()
 }
 
@@ -52,10 +58,7 @@ document.addEventListener('keyup', e => {
             startBtn.click()
             console.log('start btn')
         }
-        else if (pausePopup.checkVisibility()) {
-            console.log('resume btn')
-            resumeBtn.click()
-        }
+        
         ////restart do it manually
         // else if (restartPopup.checkVisibility()) {
         //     console.log('restart btn')

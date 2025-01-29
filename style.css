@@ -70,11 +70,11 @@ body {
 }
 
 .invader-bullet {
-    width: 5px;
+    width: 10px;
     height: 20px;
-    /* border: var(--col3) dotted; */
-    /* border-width: 0 4px; */
-    background-color: var(--col3);
+    border: var(--col3) dotted;
+    border-width: 0 4px;
+    /* background-color: var(--col3); */
     position: absolute;
 }
 
@@ -233,7 +233,10 @@ body {
 .paused .pause-popup {
     display: block;
 }
-
+.pause-popup .btns{
+    display: flex;
+  gap: 30px;
+}
 .paused .canvas,
 .paused .options {
     filter: blur(4px);
