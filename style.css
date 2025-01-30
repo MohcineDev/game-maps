@@ -134,8 +134,8 @@ body {
 .options-lives svg:last-child,
 .heartbeat {
     animation-name: scale;
-    animation-delay: 1s;
-    animation-duration: 0.8s;
+    animation-delay: 3s;
+    animation-duration: 0.16s;
     animation-iteration-count: infinite;
     margin-left: 5px;
 }
@@ -148,6 +148,7 @@ body {
     30% {
         transform: scale(1.1);
         color: #e78195;
+        opacity: 0.2;
     }
 
     60% {
@@ -157,6 +158,7 @@ body {
 
     100% {
         transform: scale(0.95);
+        opacity: 1;
     }
 }
 
@@ -380,4 +382,9 @@ nav svg {
     .popup {
         width: 180px;
     }
+}
+
+.fpsDisplay{
+    display: inline-block;
+    width: 25px;
 }

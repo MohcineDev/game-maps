@@ -430,6 +430,18 @@ function updateLives() {
 
     }
 }
+let lastTime = performance.now(); 
+
+
+let fpsDisplay = document.querySelector('.fpsDisplay')
+function updateFPS() {
+    const currentTime = performance.now();
+    const fps = Math.round(1000 / (currentTime - lastTime));
+    lastTime = currentTime;
+  
+    fpsDisplay.textContent = `${fps}`;
+  
+  }
 
 ///to remove the setInterval
 let counter = 0
@@ -448,6 +460,7 @@ export function gameLoop() {
         }
         movePlayer()
         moveBullet()
+        updateFPS()
         moveInvadersBullet()
         moveEnimieContainer()
         checkForCollision_player_enimie()
