@@ -1,6 +1,10 @@
-import { moveEnimiesX, moveEnimiesY, movePlayerSpeed, bulletSpeed, HorInput, VerInput, bulletInput } from './speed.js'
+// import { moveEnimiesX, moveEnimiesY, movePlayerSpeed, bulletSpeed, HorInput, VerInput, bulletInput } from './speed.js'
 import { restartScore } from './popups.js'
-
+export let moveEnimiesX = 3
+export let moveEnimiesY = 5
+export const movePlayerSpeed = 5
+export let bulletSpeed = 6
+   
 const canvas = document.querySelector('.canvas')
 const optionsScore = document.querySelector('.options-score span')
 const countDown = document.querySelector('.count-down')
@@ -54,10 +58,7 @@ let paused = false
 document.addEventListener('keydown', e => {
 
     keys[e.key] = true
-
-    HorInput.blur()
-    VerInput.blur()
-    bulletInput.blur()
+ 
 
     playerX = getPlayerXRelativeToCanvas(player, canvas)
     //space
