@@ -1,7 +1,7 @@
 import { restartScore } from './popups.js'
-const moveEnimiesX = 3
-const moveEnimiesY = 7
-const movePlayerSpeed = 5
+const moveEnimiesX = 4
+const moveEnimiesY = 8
+const movePlayerSpeed = 6
 const bulletSpeed = 6
 
 const canvas = document.querySelector('.canvas')
@@ -123,7 +123,7 @@ function moveBullet() {
             bullets = bullets.filter(b => b !== bullets[i])
         }
         bullets[i] ? (checkForCollision_bullet_enimie(bullets[i])
-           , collision_between_bullets(bullets[i])
+         //  , collision_between_bullets(bullets[i])
         ) : null
     }
 }
@@ -390,13 +390,13 @@ function updateLives() {
     }
 }
 
-// function updateFPS() {
-//     const currentTime = performance.now();
-//     const fps = Math.round(1000 / (currentTime - lastTime));
-//     lastTime = currentTime;
+function updateFPS() {
+    const currentTime = performance.now();
+    const fps = Math.round(1000 / (currentTime - lastTime));
+    lastTime = currentTime;
 
-//     fpsDisplay.textContent = `${fps}`;
-// }
+    fpsDisplay.textContent = `${fps}`;
+}
 
 ///to remove the setInterval
 export function gameLoop() {
@@ -414,7 +414,7 @@ export function gameLoop() {
         }
         movePlayer()
         moveBullet()
-        //updateFPS()
+        updateFPS()
         moveInvadersBullet()
         moveEnimieContainer()
         checkForCollision_player_enimie()
