@@ -15,22 +15,7 @@ const pausePopup = document.querySelector('.pause-popup')
 const pauseRestartBtn = pausePopup.querySelector('button:nth-of-type(1)')
 const pauseResumeBtn = pausePopup.querySelector('button:nth-of-type(2)')
 
-let index = 0
 
-const writeTitle = (elem, txt) => {
-    let a = txt.length
-
-    if (index < a) {
-
-        elem.textContent += txt.charAt(index)
-        index++
-        setTimeout(() => {
-            writeTitle(elem, txt)
-        }, 80)
-    }
-}
-
-writeTitle(startPopup.querySelector('h1'), 'Space invader #')
 
 startBtn.onclick = () => {
     init()
@@ -45,8 +30,8 @@ pauseResumeBtn.onclick = () => {
     enemiesShooting()
     document.body.classList.add('playing')
     document.body.classList.remove('paused')
-
 }
+
 pauseRestartBtn.onclick = () => restartGAME()
 restartBtn.onclick = () => restartGAME()
 gameWinBtn.onclick = () => restartGAME()
