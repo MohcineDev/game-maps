@@ -1,5 +1,4 @@
-import { writeTitle } from './speed.js'
-import { gameSetting, init, enimieContainer, createEnimies, gameLoop, handleCountDown, enemiesShooting } from './script.js'
+import { gameSetting, init, enimieContainer, createEnimies, gameLoop, handleCountDown, enemiesShooting, heartbeat } from './script.js'
 
 ///game over
 const restartPopup = document.querySelector('.restart-popup')
@@ -16,11 +15,27 @@ const pausePopup = document.querySelector('.pause-popup')
 const pauseRestartBtn = pausePopup.querySelector('button:nth-of-type(1)')
 const pauseResumeBtn = pausePopup.querySelector('button:nth-of-type(2)')
 
+let index = 0
+
+const writeTitle = (elem, txt) => {
+    let a = txt.length
+
+    if (index < a) {
+
+        elem.textContent += txt.charAt(index)
+        index++
+        setTimeout(() => {
+            writeTitle(elem, txt)
+        }, 80)
+    }
+}
+
 writeTitle(startPopup.querySelector('h1'), 'Space invader #')
 
 startBtn.onclick = () => {
     init()
     document.body.classList.add('playing')
+    heartbeat.style.animationPlayState=  "running";
 }
 
 pauseResumeBtn.onclick = () => {
@@ -32,7 +47,6 @@ pauseResumeBtn.onclick = () => {
     document.body.classList.remove('paused')
 
 }
-
 pauseRestartBtn.onclick = () => restartGAME()
 restartBtn.onclick = () => restartGAME()
 gameWinBtn.onclick = () => restartGAME()
@@ -43,13 +57,12 @@ function restartGAME() {
     document.body.classList.remove('over')
     ///remove wwin if exist
     document.body.classList.remove('win')
-    
+
     ///remove paused if exist
     document.body.classList.remove('paused')
 
     init()
 }
-
 
 document.addEventListener('keyup', e => {
 
@@ -58,11 +71,5 @@ document.addEventListener('keyup', e => {
             startBtn.click()
             console.log('start btn')
         }
-        
-        ////restart do it manually
-        // else if (restartPopup.checkVisibility()) {
-        //     console.log('restart btn')
-        //     restartBtn.click()
-        // }
     }
 })
