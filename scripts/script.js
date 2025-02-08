@@ -1,5 +1,5 @@
-const moveEnimiesX = 4
-const moveEnimiesY = 8
+const moveEnimiesX = 8
+const moveEnimiesY = 10
 const movePlayerSpeed = 6
 const bulletSpeed = 6
 
@@ -125,7 +125,6 @@ let gameSetting = {
 let playerX = null
 document.addEventListener('keydown', e => {
     console.log(playing);
-
     keys[e.key] = true
 
     playerX = getPlayerXRelativeToCanvas(player, canvas)
