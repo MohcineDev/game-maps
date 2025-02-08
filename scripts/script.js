@@ -140,7 +140,8 @@ document.addEventListener('keydown', e => {
                 gameSetting.canShoot = true
             }, 200)
         }
-    } else if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+    } else if ((e.key === 'p' || e.key === 'P' || e.key === 'Escape')
+         && !gameWinBtn.checkVisibility()) {
 
         if (playing) {
 
