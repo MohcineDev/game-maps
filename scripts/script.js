@@ -1,5 +1,5 @@
-const moveEnimiesX = 8
-const moveEnimiesY = 10
+const moveEnimiesX = 4
+const moveEnimiesY = 20
 const movePlayerSpeed = 6
 const bulletSpeed = 6
 
@@ -29,12 +29,10 @@ const pausePopup = document.querySelector('.pause-popup')
 const pauseRestartBtn = pausePopup.querySelector('button:nth-of-type(1)')
 const pauseResumeBtn = pausePopup.querySelector('button:nth-of-type(2)')
 
-
-
 startBtn.onclick = () => {
     init()
     document.body.classList.add('playing')
-    heartbeat.style.animationPlayState = "running";
+    // heartbeat.style.animationPlayState = "running";
 }
 
 pauseResumeBtn.onclick = () => {
@@ -44,6 +42,9 @@ pauseResumeBtn.onclick = () => {
     enemiesShooting()
     document.body.classList.add('playing')
     document.body.classList.remove('paused')
+    heartbeat = document.querySelector('.options-lives svg:last-child')
+    // heartbeat.style.animationPlayState = "running";
+
 }
 
 pauseRestartBtn.onclick = () => restartGAME()
@@ -51,6 +52,8 @@ restartBtn.onclick = () => restartGAME()
 gameWinBtn.onclick = () => restartGAME()
 
 function restartGAME() {
+    cancelAnimationFrame(REQID)
+
     enimieContainer.innerHTML = ''
     createEnimies()
     document.body.classList.remove('over')
@@ -76,7 +79,7 @@ document.addEventListener('keyup', e => {
 const playerWidth = player.clientWidth
 let canvasREC = canvas.getBoundingClientRect()
 
-addEventListener('resize', () => canvasREC = canvas.getBoundingClientRect())
+addEventListener('resize', (e) => canvasREC = canvas.getBoundingClientRect())
 
 let Score = 0
 let REQID = null
@@ -105,12 +108,10 @@ let playerRectCache = null;
 
 function getPlayerXRelativeToCanvas(player, canvas) {
     if (!playerRectCache) {
-        playerRectCache = player.getBoundingClientRect();
+        playerRectCache = player.getBoundingClientRect().left
     }
-    // const playerRect = player.getBoundingClientRect()
-    const canvasRect = canvas.getBoundingClientRect()
-    return playerRectCache.left - canvasRect.left;
-    // return playerRect.left - canvasRect.left
+    const canvasRect = canvas.getBoundingClientRect().left
+    return playerRectCache - canvasRect
 }
 
 let keys = {}
@@ -124,7 +125,6 @@ let gameSetting = {
 }
 let playerX = null
 document.addEventListener('keydown', e => {
-    console.log(playing);
     keys[e.key] = true
 
     playerX = getPlayerXRelativeToCanvas(player, canvas)
@@ -139,11 +139,9 @@ document.addEventListener('keydown', e => {
                 gameSetting.canShoot = true
             }, 200)
         }
-    } else if ((e.key === 'p' || e.key === 'P' || e.key === 'Escape')
-         && !gameWinBtn.checkVisibility()) {
+    } else if ((e.key === 'p' || e.key === 'P' || e.key === 'Escape') && !gameWinBtn.checkVisibility()) {
 
         if (playing) {
-
             gameSetting.canShoot = false
             document.body.classList.add('paused')
             document.querySelector('.pause-popup span').textContent = countDown.textContent
@@ -181,10 +179,7 @@ function moveBullet() {
 
         let bTop = parseInt(bullets[i].style.top)
         bTop -= bulletSpeed
-         bullets[i].style.top = `${bTop}px`
-        console.log(bTop);
-        
-      //  bullets[i].style.transform = `translateY(${bTop}px)`
+        bullets[i].style.top = `${bTop}px`
 
         ///the bullet height
         if (bTop <= -25) {
@@ -197,31 +192,6 @@ function moveBullet() {
         }
     }
 }
-function moveBulletii() {
-    for (let i = 0; i < bullets.length; i++) {
-
-        // Get the current position of the bullet using transform (we'll use it for vertical movement)
-        let currentTop = parseFloat(bullets[i].style.transform.replace('translateY(', '').replace('px)', '') || 0);
-
-        // Move the bullet upwards
-        currentTop -= bulletSpeed;
-
-        // Apply the new position using transform
-        bullets[i].style.transform = `translateY(${currentTop}px)`;
-
-        // If the bullet has moved off-screen, remove it
-        if (currentTop <= -25) {
-            bullets[i].remove();
-            bullets = bullets.filter(b => b !== bullets[i]);  // Remove from bullets array
-        }
-
-        // Check for collisions if the bullet is still alive
-        if (bullets[i]) {
-            checkForCollision_bullet_enimie(bullets[i]);
-        }
-    }
-}
-
 
 function createBullet(playerX) {
     const bullet = document.createElement('span')
@@ -237,7 +207,6 @@ function createBullet(playerX) {
 const enimieContainer = document.createElement('div')
 enimieContainer.style.width = `${5 * 60}px`
 enimieContainer.classList.add('enimieContainer')
-
 canvas.appendChild(enimieContainer)
 
 function createEnimies() {
@@ -247,7 +216,7 @@ function createEnimies() {
             const ghostDiv = document.createElement('div')
             ghostDiv.classList.add('enemy')
             ghostDiv.style.transform = `translate(${60 * index}px, ${35 * j}px)`;
-            ghostDiv.id = index + j
+
             enimieContainer.appendChild(ghostDiv)
         }
     }
@@ -255,6 +224,7 @@ function createEnimies() {
 createEnimies()
 
 let reverse = false
+////get new container edge
 function containerEdge() {
     const invaders = document.querySelectorAll('.enemy')
 
@@ -322,14 +292,14 @@ let howManyEnimiesCanShot = 0
 
 ///collision between enemies and the player
 function checkForCollision_player_enimie() {
-    let enimies = document.querySelectorAll('.enemy')
+    let invaders = document.querySelectorAll('.enemy')
+    let invadersLength = invaders.length
 
-    for (let i = 0; i < enimies.length; i++) {
-        let enimieREC = enimies[i].getBoundingClientRect()
+    for (let i = 0; i < invadersLength; i++) {
+        let enimieREC = invaders[i].getBoundingClientRect().bottom
 
-        if (playerREC.top <= enimieREC.bottom) {
+        if (playerREC.top <= enimieREC) {
             gameOver('killed')
-            // restartPopup.style.display = 'block'
         }
     }
 }
@@ -358,9 +328,9 @@ function enemiesShooting() {
 }
 
 
+///collisoin between player and invaders bullet
 let player_invaderBullet = false
 
-///collisoin between player and invaders bullet
 function checkForCollision_player_invaderBullet(bullet) {
 
 
@@ -422,14 +392,13 @@ function updateLives() {
             isGameOver = true
             document.querySelector(`.options-lives svg:nth-of-type(${lives + 1})`).classList.remove('heartbeat')
             document.querySelector(`.options-lives svg:nth-of-type(${lives + 1})`).style.display = 'none'
-            gameOver('0 lives KFC')
+            gameOver('0 lives ...')
         }
         if (lives > 0) {
             document.querySelector(`.options-lives svg:nth-of-type(${lives + 1})`).style.display = 'none'
             document.querySelector(`.options-lives svg:nth-of-type(${lives + 1})`).classList.remove('heartbeat')
 
             document.querySelector(`.options-lives svg:nth-of-type(${lives})`).classList.add('heartbeat')
-            document.querySelector(`.heartbeat`).style.animationPlayState = "running";
         }
 
         player_invaderBullet = false
@@ -445,7 +414,6 @@ function updateFPS() {
     fpsDisplay.textContent = `${fps}`;
 }
 
-///to remove the setInterval
 function gameLoop() {
 
     if (!isGameOver) {
@@ -515,27 +483,20 @@ function handleCountDown() {
     let seconds = parseInt(startCount[1])
 
     if (seconds === 0 && minutes > 0) {
-
         minutes--
         seconds = 59
-        countDown.textContent = minutes + ':' + seconds
-    } else if (seconds > 0) {
-        // seconds--
-        countDown.textContent = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`
     }
-    rerer(seconds, minutes)
-
-}
-function rerer(seconds, minutes) {
+   
     if (seconds > 0) {
+        console.log(`${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`);
         seconds--
+        
     } else if (minutes > 0) {
 
         minutes--
         seconds = 59
     }
-    let t = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`
-    countDown.textContent = t
+   countDown.textContent = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`
 
     if (seconds === 0 && minutes === 0) {
         gameOver('time\'s up')
@@ -549,8 +510,6 @@ function gameOver(calledFrom) {
     restartScore.textContent = Score + "."
     document.body.classList.add('over')
     document.querySelector('.restart-popup p').textContent = calledFrom
-
-
 }
 
 function gameWin() {

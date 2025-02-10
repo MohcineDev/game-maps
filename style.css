@@ -24,6 +24,20 @@ body {
     flex-direction: column;
     background-image: url('./imgs/1.webp') ;
     background-color: var(--light);
+    animation: backgroundMove 5s infinite alternate;
+}
+
+/* Keyframes for background movement */
+@keyframes backgroundMove {
+  0% {
+    background-position: 0px 0px;
+  }
+  50% {
+    background-position: 10px 10px;
+  }
+  100% {
+    background-position: 0px 0px;
+  }
 }
 
 .canvas {
@@ -45,12 +59,7 @@ body {
     position: absolute;
     background-image: url('./imgs/p0.webp');
     background-size: cover;
-    /* left: 220px; */
-    will-change: transform;
-}
-
-.pause {
-    animation-play-state: paused;
+    /* will-change: transform; */
 }
 
 .bullet {
@@ -66,8 +75,6 @@ body {
 .invader-bullet {
     width: 5px;
     height: 15px;
-    /* border: var(--col3) dotted; */
-    /* border-width: 0 4px; */
     background-color: var(--col3);
     position: absolute;
     /* will-change: transform; */
@@ -79,23 +86,9 @@ body {
     height: 59px;
     border-radius: 5px;
     position: absolute;
-    animation: alterBg 1s 0s infinite;
-    /* background-color: red; */
-    /* will-change: transform; */
-
+    background: url('./imgs/vecteezy.webp') no-repeat center / cover;
 }
-
-
-@keyframes alterBg {
-    0% {
-        background: url('./imgs/vecteezy.webp') no-repeat center / cover;
-    }
-
-    100% {
-        background: url('./imgs/vecteezy1.webp') no-repeat center / cover;
-    }
-}
-
+ 
 /* ///////////optionsssssss */
 .options {
     width: 500px;
@@ -113,6 +106,7 @@ body {
     box-shadow: 0 0 15px 0px #ac7063;
     background-color: rgba(196, 60, 200, 0.2);
     font-family: "Jersey 20", sans-serif;
+    flex-wrap: wrap;
 }
 
 .options p {
@@ -279,16 +273,33 @@ body {
     .popup {
         width: 220px;
     }
+    .popup h1, .popup p { 
+        font-size: 1.5rem; 
+    }
+    .popup button {
+        padding: 5px; 
+        font-size: 1rem; 
+        margin-top: 10px;
+    }
+    .pause-popup .btns {
+        flex-direction: column;
+        gap: 15px;
+    }
 }
 
 @media screen and (max-width:380px) {
 
     .canvas,
     .options {
-        width: 280px;
+        width: 90%;
     }
 
     .popup {
         width: 180px;
+    }
+
+ 
+    .enimieContainer{
+        width: 200px;  
     }
 }
