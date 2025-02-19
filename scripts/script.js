@@ -65,8 +65,11 @@ function restartGAME() {
 
     init()
 }
+///save pressed keys
+let keys = {}
 
 document.addEventListener('keyup', e => {
+    keys[e.key] = false
 
     if (e.key === ' ') {
         if (startPopup.checkVisibility()) {
@@ -114,12 +117,7 @@ function getPlayerXRelativeToCanvas(player, canvas) {
     return playerRectCache - canvasRect
 }
 
-let keys = {}
-
-document.addEventListener('keyup', e => {
-    keys[e.key] = false
-})
-
+ 
 let gameSetting = {
     canShoot: true
 }
@@ -172,36 +170,49 @@ function movePlayer() {
 }
 
 let bullets = []
+let bTop = null
 
 function moveBullet() {
 
     for (let i = 0; i < bullets.length; i++) {
+        // console.log(parseInt(bullets[i].style.transform));
 
-        let bTop = parseInt(bullets[i].style.top)
-        bTop -= bulletSpeed
-        bullets[i].style.top = `${bTop}px`
-
+        // let bTop = parseInt(bullets[i].style.top)
+        bTop = bullets[i].y - bulletSpeed
+        // bullets[i].style.top = `${bTop}px`
+        //  bullets[i].b.style.transform = `translateY(${bTop}px)`
+        bullets[i].b.style.transform = `translate(${bullets[i].x}px, ${bTop}px)`
+        bullets[i].y = bTop
         ///the bullet height
         if (bTop <= -25) {
-            bullets[i].remove()
+            bullets[i].b.remove()
             ///remove the curcreateBulletrent bullet
             bullets = bullets.filter(b => b !== bullets[i])
         }
         if (bullets[i]) {
-            checkForCollision_bullet_enimie(bullets[i])
+            checkForCollision_bullet_enimie(bullets[i].b)
         }
     }
 }
+let xPos = null
 
 function createBullet(playerX) {
     const bullet = document.createElement('span')
     bullet.classList.add('bullet')
-    bullet.style.left = `${playerX + playerWidth / 2}px`
-    bullet.style.top = `${playerInitY - 40}px`
-    bullet.style.transform = `translate(-50%)`
+    xPos = playerX + playerWidth / 2 - 4
+    bullet.style.transform = `translate(${xPos}px, ${playerInitY - 40}px)`
+    // bullet.style.left = `${playerX + playerWidth / 2}px`
+    // bullet.style.top = `${playerInitY - 40}px`
+    // bullet.style.transform = `translate(-50%)`
 
+    let bulletObj = {
+        b: bullet,
+        x: xPos,
+        y: playerInitY - 40
+    }
     canvas.appendChild(bullet)
-    bullets.push(bullet)
+    bullets.push(bulletObj)
+    // bullets.push(bullet)
 }
 
 const enimieContainer = document.createElement('div')
@@ -420,7 +431,7 @@ function gameLoop() {
         counter++
         if (counter == 60) {
             handleCountDown()
-            enemiesShooting()
+              enemiesShooting()
 
             counter = 0
         }
@@ -429,7 +440,7 @@ function gameLoop() {
         moveBullet()
         updateFPS()
         moveInvadersBullet()
-        moveEnimieContainer()
+          moveEnimieContainer()
         checkForCollision_player_enimie()
         REQID = requestAnimationFrame(gameLoop)
     }
@@ -486,17 +497,17 @@ function handleCountDown() {
         minutes--
         seconds = 59
     }
-   
+
     if (seconds > 0) {
         console.log(`${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`);
         seconds--
-        
+
     } else if (minutes > 0) {
 
         minutes--
         seconds = 59
     }
-   countDown.textContent = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`
+    countDown.textContent = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`
 
     if (seconds === 0 && minutes === 0) {
         gameOver('time\'s up')
