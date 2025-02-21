@@ -24,22 +24,20 @@ body {
     flex-direction: column;
     background-image: url('./imgs/1.webp');
     background-color: var(--light);
-    /* animation: backgroundMove 5s infinite alternate; */
+    animation: backgroundMove 5s infinite alternate;
 }
 
 /* Keyframes for background movement */
 @keyframes backgroundMove {
-    0% {
-        background-position: 0px 0px;
-    }
-
-    50% {
-        background-position: 10px 10px;
-    }
-
-    100% {
-        background-position: 0px 0px;
-    }
+  0% {
+    background-position: 0px 0px;
+  }
+  50% {
+    background-position: 10px 10px;
+  }
+  100% {
+    background-position: 0px 0px;
+  }
 }
 
 .canvas {
@@ -92,10 +90,8 @@ body {
     border-radius: 5px;
     position: absolute;
     background: url('./imgs/vecteezy.webp') no-repeat center / cover;
-    background: url('./imgs/tile3.png') no-repeat center / cover;
-    background-position: -40px 0px;
 }
-
+ 
 /* ///////////optionsssssss */
 .options {
     width: 500px;
@@ -303,17 +299,14 @@ input[type="radio"]:checked+label::before {
     .popup {
         width: 220px;
     }
-
-    .popup h1, .popup p {
-        font-size: 1.5rem;
+    .popup h1, .popup p { 
+        font-size: 1.5rem; 
     }
-
     .popup button {
-        padding: 5px;
-        font-size: 1rem;
+        padding: 5px; 
+        font-size: 1rem; 
         margin-top: 10px;
     }
-
     .pause-popup .btns {
         flex-direction: column;
         gap: 15px;
@@ -331,36 +324,8 @@ input[type="radio"]:checked+label::before {
         width: 180px;
     }
 
-
-    .enimieContainer {
-        width: 200px;
+ 
+    .enimieContainer{
+        width: 200px;  
     }
-}
-
-#mapContainer {
-    width: 500px;
-    height: 670px;
-    position: relative;
-    /* Allows absolutely positioned child elements */
-    overflow: hidden;
-    /* Optional: To hide anything outside the map container */
-}
-
-.tile {
-    width: 40px;
-    height: 40px;
-    z-index: -1;
-    background-image: url('./imgs/tile3.png');
-}
-
-.tile-0 {
-    background-position: 0 0;
-}
-
-.tile-1 {
-    background-position: -32px 0;
-}
-
-.tile-2 {
-    background-position: -64px 0;
 }
