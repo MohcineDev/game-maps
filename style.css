@@ -9,7 +9,7 @@
     --pop-shadow: 0 0 7px var(--col3), 0 0 7px var(--col2) inset;
 
 }
- 
+
 svg {
     width: 20px;
 }
@@ -17,25 +17,44 @@ svg {
 body {
     min-height: 100vh;
     margin: 0;
-    color: #fff;  
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background-image: url('./imgs/1.webp') ;
+    background-image: url('./imgs/1.webp');
     background-color: var(--light);
+    /* animation: backgroundMove 5s infinite alternate; */
+}
+
+/* Keyframes for background movement */
+@keyframes backgroundMove {
+    0% {
+        background-position: 0px 0px;
+    }
+
+    50% {
+        background-position: 10px 10px;
+    }
+
+    100% {
+        background-position: 0px 0px;
+    }
 }
 
 .canvas {
     width: 500px;
     height: 670px;
-    background-color: #2f2f68;
+    /* background-color: #2f2f68; */
     position: relative;
     border-radius: 10px;
     overflow: hidden;
-    background-image: url('./imgs/1.webp');
+    /* background-image: url('./imgs/1.webp'); */
     box-shadow: 0 0 15px 0px #ac7063;
-    filter: blur(4px);
+    /* filter: blur(4px); */
+    display: grid;
+    grid-template-columns: repeat(calc(500/40), 40px);
+    grid-template-rows: repeat(calc(670/40), 40px);
 }
 
 .player {
@@ -45,12 +64,7 @@ body {
     position: absolute;
     background-image: url('./imgs/p0.webp');
     background-size: cover;
-    /* left: 220px; */
-    will-change: transform;
-}
-
-.pause {
-    animation-play-state: paused;
+    /* will-change: transform; */
 }
 
 .bullet {
@@ -66,8 +80,6 @@ body {
 .invader-bullet {
     width: 5px;
     height: 15px;
-    /* border: var(--col3) dotted; */
-    /* border-width: 0 4px; */
     background-color: var(--col3);
     position: absolute;
     /* will-change: transform; */
@@ -75,25 +87,13 @@ body {
 }
 
 .enemy {
-    width: 60px;
-    height: 59px;
+    width: 40px;
+    height: 40px;
     border-radius: 5px;
     position: absolute;
-    animation: alterBg 1s 0s infinite;
-    /* background-color: red; */
-    /* will-change: transform; */
-
-}
-
-
-@keyframes alterBg {
-    0% {
-        background: url('./imgs/vecteezy.webp') no-repeat center / cover;
-    }
-
-    100% {
-        background: url('./imgs/vecteezy1.webp') no-repeat center / cover;
-    }
+    background: url('./imgs/vecteezy.webp') no-repeat center / cover;
+    background: url('./imgs/tile3.png') no-repeat center / cover;
+    background-position: -40px 0px;
 }
 
 /* ///////////optionsssssss */
@@ -113,6 +113,7 @@ body {
     box-shadow: 0 0 15px 0px #ac7063;
     background-color: rgba(196, 60, 200, 0.2);
     font-family: "Jersey 20", sans-serif;
+    flex-wrap: wrap;
 }
 
 .options p {
@@ -169,11 +170,11 @@ body {
     position: absolute;
     text-align: center;
     padding: 2rem 1.5rem;
-    border-radius: 14px 0; 
+    border-radius: 14px 0;
     text-transform: uppercase;
     border: 2px solid var(--col1);
     box-shadow: var(--pop-shadow);
-    font-family: "Jersey 20", sans-serif; 
+    font-family: "Jersey 20", sans-serif;
 }
 
 .popup h1,
@@ -201,13 +202,35 @@ body {
     box-shadow: 0 0 7px #d10f36 inset, 0 0 7px 2px var(--col1);
 }
 
-/* .popup button:hover {
-    transform: translate(5px, 5px);
-    text-shadow: 0 2px 0px aqua, 0 -2px 0px red;
-} */
+label {
+    text-shadow: 0 -3px 0px rgb(0, 251, 255), 0 3px 0px rgb(255, 47, 0);
+    font-size: 2rem;
+    cursor: pointer;
+    position: relative;
+    margin: 15px;
+    padding: 5px;
+    
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"]:checked+label::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+    border:  yellow double;
+    border-width: 0 5px ;
+}
 
 .start-popup {
     display: block;
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .start-popup h1 {
@@ -269,6 +292,7 @@ body {
     display: inline-block;
     width: 25px;
 }
+
 @media screen and (max-width:580px) {
 
     .canvas,
@@ -279,16 +303,64 @@ body {
     .popup {
         width: 220px;
     }
+
+    .popup h1, .popup p {
+        font-size: 1.5rem;
+    }
+
+    .popup button {
+        padding: 5px;
+        font-size: 1rem;
+        margin-top: 10px;
+    }
+
+    .pause-popup .btns {
+        flex-direction: column;
+        gap: 15px;
+    }
 }
 
 @media screen and (max-width:380px) {
 
     .canvas,
     .options {
-        width: 280px;
+        width: 90%;
     }
 
     .popup {
         width: 180px;
     }
+
+
+    .enimieContainer {
+        width: 200px;
+    }
+}
+
+#mapContainer {
+    width: 500px;
+    height: 670px;
+    position: relative;
+    /* Allows absolutely positioned child elements */
+    overflow: hidden;
+    /* Optional: To hide anything outside the map container */
+}
+
+.tile {
+    width: 40px;
+    height: 40px;
+    z-index: -1;
+    background-image: url('./imgs/tile3.png');
+}
+
+.tile-0 {
+    background-position: 0 0;
+}
+
+.tile-1 {
+    background-position: -32px 0;
+}
+
+.tile-2 {
+    background-position: -64px 0;
 }

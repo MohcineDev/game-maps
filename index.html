@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    
+
     <div class="game-win-popup popup">
         <h1>You win</h1>
         <h1>Score : <span>0</span></h1>
@@ -19,6 +19,21 @@
     </div>
     <div class="start-popup popup">
         <h1># Space invader #</h1>
+        <h2>Choose the map</h2>
+        <div>
+            <div>
+                <input type="radio" name="map" id="map1" checked>
+                <label for="map1">map I</label>
+            </div>
+            <div>
+                <input type="radio" name="map" id="map2">
+                <label for="map2">map II</label>
+            </div>
+            <div>
+                <input type="radio" name="map" id="map3">
+                <label for="map3">map III</label>
+            </div>
+        </div>
         <button tabindex="2">Start</button>
     </div>
     <div class="restart-popup popup">
@@ -35,7 +50,7 @@
         </p>
         <div class="btns">
             <button>restart</button>
-            <button>REsume</button>
+            <button>continue</button>
         </div>
     </div>
     <div class="options">
@@ -70,9 +85,11 @@
             </p>
         </div>
     </div>
-    <div class="canvas">
+    <div class="canvas" id="mapContainer">
         <div class="player"></div>
     </div>
     <script src="./scripts/script.js"></script>
+    <script src="./scripts/game.js"></script>
 </body>
+
 </html>
