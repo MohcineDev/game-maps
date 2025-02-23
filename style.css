@@ -29,15 +29,17 @@ body {
 
 /* Keyframes for background movement */
 @keyframes backgroundMove {
-  0% {
-    background-position: 0px 0px;
-  }
-  50% {
-    background-position: 10px 10px;
-  }
-  100% {
-    background-position: 0px 0px;
-  }
+    0% {
+        background-position: 0px 0px;
+    }
+
+    50% {
+        background-position: 10px 10px;
+    }
+
+    100% {
+        background-position: 0px 0px;
+    }
 }
 
 .canvas {
@@ -50,9 +52,22 @@ body {
     /* background-image: url('./imgs/1.webp'); */
     box-shadow: 0 0 15px 0px #ac7063;
     /* filter: blur(4px); */
+}
+
+#mapContainer {
+    width: 500px;
+    height: 670px;
     display: grid;
-    grid-template-columns: repeat(calc(500/40), 40px);
-    grid-template-rows: repeat(calc(670/40), 40px);
+    grid-template-rows: repeat(12, 60px);
+    grid-template-columns: repeat(9, 60px);
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.tile {
+    width: 60px;
+    height: 60px;
 }
 
 .player {
@@ -60,8 +75,8 @@ body {
     height: 55px;
     top: 600px;
     position: absolute;
-    background-image: url('./imgs/p0.webp');
-    background-size: cover;
+    background-image: url('./imgs/t1.png');
+    background-position: -180px 0;
     /* will-change: transform; */
 }
 
@@ -85,13 +100,14 @@ body {
 }
 
 .enemy {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 5px;
     position: absolute;
-    background: url('./imgs/vecteezy.webp') no-repeat center / cover;
+    background: url('./imgs/t1.png') no-repeat center / cover;
+    background-position: -120px 0;
 }
- 
+
 /* ///////////optionsssssss */
 .options {
     width: 500px;
@@ -205,7 +221,7 @@ label {
     position: relative;
     margin: 15px;
     padding: 5px;
-    
+
 }
 
 input[type="radio"] {
@@ -220,8 +236,8 @@ input[type="radio"]:checked+label::before {
     bottom: 0;
     left: 50%;
     transform: translate(-50%);
-    border:  yellow double;
-    border-width: 0 5px ;
+    border: yellow double;
+    border-width: 0 5px;
 }
 
 .start-popup {
@@ -299,14 +315,17 @@ input[type="radio"]:checked+label::before {
     .popup {
         width: 220px;
     }
-    .popup h1, .popup p { 
-        font-size: 1.5rem; 
+
+    .popup h1, .popup p {
+        font-size: 1.5rem;
     }
+
     .popup button {
-        padding: 5px; 
-        font-size: 1rem; 
+        padding: 5px;
+        font-size: 1rem;
         margin-top: 10px;
     }
+
     .pause-popup .btns {
         flex-direction: column;
         gap: 15px;
@@ -324,8 +343,8 @@ input[type="radio"]:checked+label::before {
         width: 180px;
     }
 
- 
-    .enimieContainer{
-        width: 200px;  
+
+    .enimieContainer {
+        width: 200px;
     }
 }
