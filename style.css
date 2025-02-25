@@ -76,7 +76,7 @@ body {
     top: 600px;
     position: absolute;
     background-image: url('./imgs/t1.png');
-    background-position: -180px 0;
+    background-position: -60px 0;
     /* will-change: transform; */
 }
 
