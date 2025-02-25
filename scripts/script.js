@@ -483,6 +483,10 @@ function init() {
 
         requestAnimationFrame(gameLoop);
     }
+
+let radio = document.querySelector('input[type="radio"]:checked')
+renderMap(map1, `url("../imgs/tilef${radio.id.substring(3)}.png")`)
+
 }
 
 ///count-down

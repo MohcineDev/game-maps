@@ -51,7 +51,7 @@ body {
     overflow: hidden;
     /* background-image: url('./imgs/1.webp'); */
     box-shadow: 0 0 15px 0px #ac7063;
-    /* filter: blur(4px); */
+    filter: blur(4px);
 }
 
 #mapContainer {
@@ -75,7 +75,6 @@ body {
     height: 55px;
     top: 600px;
     position: absolute;
-    background-image: url('./imgs/t1.png');
     background-position: -60px 0;
     /* will-change: transform; */
 }
@@ -93,7 +92,7 @@ body {
 .invader-bullet {
     width: 5px;
     height: 15px;
-    background-color: var(--col3);
+    background-color: #fff;
     position: absolute;
     /* will-change: transform; */
 
@@ -104,7 +103,7 @@ body {
     height: 60px;
     border-radius: 5px;
     position: absolute;
-    background: url('./imgs/t1.png') no-repeat center / cover;
+    /* background: url('./imgs/t1.png') no-repeat center / cover; */
     background-position: -120px 0;
 }
 
